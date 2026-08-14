@@ -120,6 +120,11 @@
             color: white;
         }
 
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
         .message {
             display: none;
             margin-top: 20px;
@@ -180,7 +185,10 @@
                     required
                 >
 
-                <button type="submit" id="sendButton">
+                <button
+                    type="submit"
+                    id="sendButton"
+                >
                     ENVIAR ENLACE
                 </button>
 
@@ -225,9 +233,10 @@
 
         form.addEventListener(
             "submit",
-            async function(event) {
+            async function (event) {
 
                 event.preventDefault();
+
 
                 const correo =
                     document
@@ -236,13 +245,25 @@
                         .trim();
 
 
-                message.className = "message";
-                message.textContent = "";
+                message.className =
+                    "message";
 
-                sendButton.disabled = true;
+                message.textContent =
+                    "";
+
+
+                sendButton.disabled =
+                    true;
 
                 sendButton.textContent =
                     "ENVIANDO...";
+
+
+                const redirectUrl =
+                    new URL(
+                        "nueva-contrasena.html",
+                        window.location.href
+                    ).href;
 
 
                 const { error } =
@@ -251,8 +272,7 @@
                             correo,
                             {
                                 redirectTo:
-                                    window.location.origin +
-                                    "/nueva-contrasena.html"
+                                    redirectUrl
                             }
                         );
 
@@ -261,12 +281,15 @@
 
                     console.error(error);
 
-                    message.classList.add("error");
+                    message.classList.add(
+                        "error"
+                    );
 
                     message.textContent =
                         "No se pudo enviar el correo.";
 
-                    sendButton.disabled = false;
+                    sendButton.disabled =
+                        false;
 
                     sendButton.textContent =
                         "ENVIAR ENLACE";
@@ -275,12 +298,16 @@
                 }
 
 
-                message.classList.add("success");
+                message.classList.add(
+                    "success"
+                );
 
                 message.textContent =
                     "Te enviamos un enlace. Revisa tu correo.";
 
-                sendButton.disabled = false;
+
+                sendButton.disabled =
+                    false;
 
                 sendButton.textContent =
                     "ENVIAR ENLACE";
@@ -291,4 +318,4 @@
     </script>
 
 </body>
-</html>     
+</html>
