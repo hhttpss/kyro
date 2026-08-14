@@ -61,26 +61,213 @@
 
         .image-area {
             background: #e9e9e7;
-
             min-height: calc(100vh - 78px);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
+            position: relative;
             overflow: hidden;
         }
 
-        .image-area img {
+        .gallery {
+            width: 100%;
+            height: 100%;
+            min-height: calc(100vh - 78px);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #e9e9e7;
+        }
+
+        .gallery-main {
+            width: 100%;
+            height: 100%;
+            min-height: calc(100vh - 78px);
+            object-fit: cover;
+            cursor: zoom-in;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .gallery-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.55);
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-arrow.prev {
+            left: 18px;
+        }
+
+        .gallery-arrow.next {
+            right: 18px;
+        }
+
+        .gallery-arrow:disabled {
+            display: none;
+        }
+
+        .gallery-bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 18px;
+            z-index: 5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 0 18px;
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            gap: 7px;
+            max-width: calc(100% - 120px);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .gallery-thumbnails::-webkit-scrollbar {
+            display: none;
+        }
+
+        .gallery-thumb {
+            width: 44px;
+            height: 54px;
+            flex: 0 0 auto;
+            border: 2px solid transparent;
+            padding: 0;
+            background: #ddd;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .gallery-thumb.active {
+            border-color: white;
+            opacity: 1;
+        }
+
+        .gallery-thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
+        }
+
+        .gallery-counter,
+        .zoom-button {
+            border: none;
+            background: rgba(0, 0, 0, 0.68);
+            color: white;
+            min-height: 34px;
+            padding: 0 10px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .zoom-button {
+            cursor: pointer;
         }
 
         .no-image {
+            min-height: calc(100vh - 78px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 12px;
             color: #888;
             letter-spacing: 1px;
+        }
+
+        .zoom-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0, 0, 0, 0.96);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        .zoom-modal.active {
+            display: flex;
+        }
+
+        .zoom-image {
+            max-width: 92vw;
+            max-height: 90vh;
+            object-fit: contain;
+            transform-origin: center center;
+            transition: transform 0.15s ease;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .zoom-close,
+        .zoom-control,
+        .zoom-nav {
+            position: absolute;
+            z-index: 10;
+            border: none;
+            background: rgba(255, 255, 255, 0.12);
+            color: white;
+            cursor: pointer;
+        }
+
+        .zoom-close {
+            top: 18px;
+            right: 18px;
+            width: 44px;
+            height: 44px;
+            font-size: 28px;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .zoom-control {
+            position: static;
+            width: 44px;
+            height: 44px;
+            font-size: 20px;
+        }
+
+        .zoom-nav {
+            top: 50%;
+            transform: translateY(-50%);
+            width: 48px;
+            height: 60px;
+            font-size: 28px;
+        }
+
+        .zoom-nav.prev {
+            left: 16px;
+        }
+
+        .zoom-nav.next {
+            right: 16px;
         }
 
         .info-area {
@@ -269,6 +456,36 @@
                 min-height: 60vh;
             }
 
+            .gallery,
+            .gallery-main,
+            .no-image {
+                min-height: 60vh;
+            }
+
+            .gallery-arrow {
+                width: 40px;
+                height: 40px;
+            }
+
+            .gallery-bottom {
+                bottom: 12px;
+                padding: 0 12px;
+            }
+
+            .gallery-thumb {
+                width: 38px;
+                height: 48px;
+            }
+
+            .gallery-thumbnails {
+                max-width: calc(100% - 105px);
+            }
+
+            .zoom-nav {
+                width: 42px;
+                height: 52px;
+            }
+
             .info-area {
                 padding: 45px 22px 60px;
             }
@@ -389,20 +606,179 @@
                 Number(producto.stock) > 0;
 
 
-            let imagen = `
-                <span class="no-image">
+            let imagenes = [];
+
+            if (
+                Array.isArray(producto.imagenes) &&
+                producto.imagenes.length > 0
+            ) {
+                imagenes = producto.imagenes.filter(Boolean);
+            }
+
+            if (
+                producto.imagen &&
+                !imagenes.includes(producto.imagen)
+            ) {
+                imagenes.unshift(producto.imagen);
+            }
+
+            imagenes = [...new Set(imagenes)];
+
+            let galeriaHTML = `
+                <div class="no-image">
                     SIN IMAGEN
-                </span>
+                </div>
             `;
 
+            if (imagenes.length > 0) {
 
-            if (producto.imagen) {
+                const miniaturas = imagenes
+                    .map(
+                        (url, indice) => `
+                            <button
+                                type="button"
+                                class="gallery-thumb ${indice === 0 ? "active" : ""}"
+                                data-gallery-index="${indice}"
+                                aria-label="Ver imagen ${indice + 1}"
+                            >
+                                <img
+                                    src="${url}"
+                                    alt="${producto.nombre} ${indice + 1}"
+                                >
+                            </button>
+                        `
+                    )
+                    .join("");
 
-                imagen = `
-                    <img
-                        src="${producto.imagen}"
-                        alt="${producto.nombre}"
+                galeriaHTML = `
+                    <div class="gallery" id="gallery">
+
+                        <img
+                            class="gallery-main"
+                            id="galleryMain"
+                            src="${imagenes[0]}"
+                            alt="${producto.nombre}"
+                            draggable="false"
+                        >
+
+                        <button
+                            type="button"
+                            class="gallery-arrow prev"
+                            id="galleryPrev"
+                            aria-label="Imagen anterior"
+                            ${imagenes.length <= 1 ? "disabled" : ""}
+                        >
+                            ‹
+                        </button>
+
+                        <button
+                            type="button"
+                            class="gallery-arrow next"
+                            id="galleryNext"
+                            aria-label="Imagen siguiente"
+                            ${imagenes.length <= 1 ? "disabled" : ""}
+                        >
+                            ›
+                        </button>
+
+                        <div class="gallery-bottom">
+
+                            <div
+                                class="gallery-counter"
+                                id="galleryCounter"
+                            >
+                                1 / ${imagenes.length}
+                            </div>
+
+                            <div class="gallery-thumbnails">
+                                ${miniaturas}
+                            </div>
+
+                            <button
+                                type="button"
+                                class="zoom-button"
+                                id="openZoom"
+                            >
+                                AMPLIAR
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="zoom-modal"
+                        id="zoomModal"
+                        aria-hidden="true"
                     >
+
+                        <button
+                            type="button"
+                            class="zoom-close"
+                            id="zoomClose"
+                            aria-label="Cerrar"
+                        >
+                            ×
+                        </button>
+
+                        <button
+                            type="button"
+                            class="zoom-nav prev"
+                            id="zoomPrev"
+                            aria-label="Imagen anterior"
+                            ${imagenes.length <= 1 ? "style='display:none'" : ""}
+                        >
+                            ‹
+                        </button>
+
+                        <img
+                            class="zoom-image"
+                            id="zoomImage"
+                            src="${imagenes[0]}"
+                            alt="${producto.nombre}"
+                            draggable="false"
+                        >
+
+                        <button
+                            type="button"
+                            class="zoom-nav next"
+                            id="zoomNext"
+                            aria-label="Imagen siguiente"
+                            ${imagenes.length <= 1 ? "style='display:none'" : ""}
+                        >
+                            ›
+                        </button>
+
+                        <div class="zoom-controls">
+                            <button
+                                type="button"
+                                class="zoom-control"
+                                id="zoomOut"
+                                aria-label="Alejar"
+                            >
+                                −
+                            </button>
+
+                            <button
+                                type="button"
+                                class="zoom-control"
+                                id="zoomReset"
+                                aria-label="Restablecer zoom"
+                            >
+                                1:1
+                            </button>
+
+                            <button
+                                type="button"
+                                class="zoom-control"
+                                id="zoomIn"
+                                aria-label="Acercar"
+                            >
+                                +
+                            </button>
+                        </div>
+
+                    </div>
                 `;
 
             }
@@ -413,7 +789,7 @@
                 <section class="product-page">
 
                     <div class="image-area">
-                        ${imagen}
+                        ${galeriaHTML}
                     </div>
 
 
@@ -518,6 +894,411 @@
 
             const mensaje =
                 document.getElementById("message");
+
+
+            // =================================
+            // GALERÍA / ZOOM
+            // =================================
+
+            if (imagenes.length > 0) {
+
+                let indiceImagen = 0;
+                let escalaZoom = 1;
+
+                const galleryMain =
+                    document.getElementById("galleryMain");
+
+                const galleryPrev =
+                    document.getElementById("galleryPrev");
+
+                const galleryNext =
+                    document.getElementById("galleryNext");
+
+                const galleryCounter =
+                    document.getElementById("galleryCounter");
+
+                const openZoom =
+                    document.getElementById("openZoom");
+
+                const zoomModal =
+                    document.getElementById("zoomModal");
+
+                const zoomImage =
+                    document.getElementById("zoomImage");
+
+                const zoomClose =
+                    document.getElementById("zoomClose");
+
+                const zoomPrev =
+                    document.getElementById("zoomPrev");
+
+                const zoomNext =
+                    document.getElementById("zoomNext");
+
+                const zoomIn =
+                    document.getElementById("zoomIn");
+
+                const zoomOut =
+                    document.getElementById("zoomOut");
+
+                const zoomReset =
+                    document.getElementById("zoomReset");
+
+
+                function actualizarGaleria(nuevoIndice) {
+
+                    if (nuevoIndice < 0) {
+                        nuevoIndice =
+                            imagenes.length - 1;
+                    }
+
+                    if (nuevoIndice >= imagenes.length) {
+                        nuevoIndice = 0;
+                    }
+
+                    indiceImagen =
+                        nuevoIndice;
+
+                    galleryMain.src =
+                        imagenes[indiceImagen];
+
+                    zoomImage.src =
+                        imagenes[indiceImagen];
+
+                    galleryCounter.textContent =
+                        (indiceImagen + 1) +
+                        " / " +
+                        imagenes.length;
+
+                    document
+                        .querySelectorAll(".gallery-thumb")
+                        .forEach(
+                            function (miniatura, indice) {
+
+                                miniatura.classList.toggle(
+                                    "active",
+                                    indice === indiceImagen
+                                );
+
+                            }
+                        );
+
+                    escalaZoom = 1;
+                    zoomImage.style.transform =
+                        "scale(1)";
+
+                }
+
+
+                document
+                    .querySelectorAll(".gallery-thumb")
+                    .forEach(
+                        function (miniatura) {
+
+                            miniatura.addEventListener(
+                                "click",
+                                function () {
+
+                                    actualizarGaleria(
+                                        Number(
+                                            miniatura.dataset.galleryIndex
+                                        )
+                                    );
+
+                                }
+                            );
+
+                        }
+                    );
+
+
+                if (galleryPrev) {
+                    galleryPrev.addEventListener(
+                        "click",
+                        function () {
+                            actualizarGaleria(
+                                indiceImagen - 1
+                            );
+                        }
+                    );
+                }
+
+
+                if (galleryNext) {
+                    galleryNext.addEventListener(
+                        "click",
+                        function () {
+                            actualizarGaleria(
+                                indiceImagen + 1
+                            );
+                        }
+                    );
+                }
+
+
+                function abrirZoom() {
+
+                    escalaZoom = 1;
+
+                    zoomImage.style.transform =
+                        "scale(1)";
+
+                    zoomModal.classList.add(
+                        "active"
+                    );
+
+                    zoomModal.setAttribute(
+                        "aria-hidden",
+                        "false"
+                    );
+
+                    document.body.style.overflow =
+                        "hidden";
+
+                }
+
+
+                function cerrarZoom() {
+
+                    zoomModal.classList.remove(
+                        "active"
+                    );
+
+                    zoomModal.setAttribute(
+                        "aria-hidden",
+                        "true"
+                    );
+
+                    document.body.style.overflow =
+                        "";
+
+                    escalaZoom = 1;
+
+                    zoomImage.style.transform =
+                        "scale(1)";
+
+                }
+
+
+                galleryMain.addEventListener(
+                    "click",
+                    abrirZoom
+                );
+
+                openZoom.addEventListener(
+                    "click",
+                    abrirZoom
+                );
+
+                zoomClose.addEventListener(
+                    "click",
+                    cerrarZoom
+                );
+
+
+                zoomModal.addEventListener(
+                    "click",
+                    function (event) {
+
+                        if (event.target === zoomModal) {
+                            cerrarZoom();
+                        }
+
+                    }
+                );
+
+
+                if (zoomPrev) {
+                    zoomPrev.addEventListener(
+                        "click",
+                        function () {
+                            actualizarGaleria(
+                                indiceImagen - 1
+                            );
+                        }
+                    );
+                }
+
+
+                if (zoomNext) {
+                    zoomNext.addEventListener(
+                        "click",
+                        function () {
+                            actualizarGaleria(
+                                indiceImagen + 1
+                            );
+                        }
+                    );
+                }
+
+
+                function aplicarZoom() {
+
+                    escalaZoom =
+                        Math.min(
+                            4,
+                            Math.max(
+                                1,
+                                escalaZoom
+                            )
+                        );
+
+                    zoomImage.style.transform =
+                        "scale(" +
+                        escalaZoom +
+                        ")";
+
+                }
+
+
+                zoomIn.addEventListener(
+                    "click",
+                    function () {
+
+                        escalaZoom += 0.5;
+                        aplicarZoom();
+
+                    }
+                );
+
+
+                zoomOut.addEventListener(
+                    "click",
+                    function () {
+
+                        escalaZoom -= 0.5;
+                        aplicarZoom();
+
+                    }
+                );
+
+
+                zoomReset.addEventListener(
+                    "click",
+                    function () {
+
+                        escalaZoom = 1;
+                        aplicarZoom();
+
+                    }
+                );
+
+
+                zoomModal.addEventListener(
+                    "wheel",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        escalaZoom +=
+                            event.deltaY < 0
+                                ? 0.25
+                                : -0.25;
+
+                        aplicarZoom();
+
+                    },
+                    {
+                        passive: false
+                    }
+                );
+
+
+                document.addEventListener(
+                    "keydown",
+                    function (event) {
+
+                        if (
+                            !zoomModal.classList.contains(
+                                "active"
+                            )
+                        ) {
+                            return;
+                        }
+
+                        if (event.key === "Escape") {
+                            cerrarZoom();
+                        }
+
+                        if (event.key === "ArrowLeft") {
+                            actualizarGaleria(
+                                indiceImagen - 1
+                            );
+                        }
+
+                        if (event.key === "ArrowRight") {
+                            actualizarGaleria(
+                                indiceImagen + 1
+                            );
+                        }
+
+                    }
+                );
+
+
+                let touchInicioX = 0;
+                let touchFinX = 0;
+
+
+                function manejarSwipe() {
+
+                    const diferencia =
+                        touchFinX - touchInicioX;
+
+                    if (
+                        Math.abs(diferencia) < 45
+                    ) {
+                        return;
+                    }
+
+                    if (diferencia < 0) {
+                        actualizarGaleria(
+                            indiceImagen + 1
+                        );
+                    } else {
+                        actualizarGaleria(
+                            indiceImagen - 1
+                        );
+                    }
+
+                }
+
+
+                const gallery =
+                    document.getElementById("gallery");
+
+                gallery.addEventListener(
+                    "touchstart",
+                    function (event) {
+
+                        touchInicioX =
+                            event.changedTouches[0]
+                                .screenX;
+
+                    },
+                    {
+                        passive: true
+                    }
+                );
+
+
+                gallery.addEventListener(
+                    "touchend",
+                    function (event) {
+
+                        touchFinX =
+                            event.changedTouches[0]
+                                .screenX;
+
+                        manejarSwipe();
+
+                    },
+                    {
+                        passive: true
+                    }
+                );
+
+            }
 
 
             // =================================
