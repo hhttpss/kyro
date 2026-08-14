@@ -216,6 +216,14 @@
             transition: transform 0.15s ease;
             user-select: none;
             -webkit-user-drag: none;
+            cursor: grab;
+            touch-action: none;
+            will-change: transform;
+        }
+
+        .zoom-image.dragging {
+            cursor: grabbing;
+            transition: none;
         }
 
         .zoom-close,
@@ -905,6 +913,20 @@
                 let indiceImagen = 0;
                 let escalaZoom = 1;
 
+                let desplazamientoX = 0;
+                let desplazamientoY = 0;
+
+                let arrastrando = false;
+                let inicioArrastreX = 0;
+                let inicioArrastreY = 0;
+                let inicioDesplazamientoX = 0;
+                let inicioDesplazamientoY = 0;
+
+                let distanciaPinzaInicial = 0;
+                let escalaPinzaInicial = 1;
+
+                let ultimoToque = 0;
+
                 const galleryMain =
                     document.getElementById("galleryMain");
 
@@ -984,8 +1006,11 @@
                         );
 
                     escalaZoom = 1;
+                    desplazamientoX = 0;
+                    desplazamientoY = 0;
+
                     zoomImage.style.transform =
-                        "scale(1)";
+                        "translate(0px, 0px) scale(1)";
 
                 }
 
@@ -1039,9 +1064,11 @@
                 function abrirZoom() {
 
                     escalaZoom = 1;
+                    desplazamientoX = 0;
+                    desplazamientoY = 0;
 
                     zoomImage.style.transform =
-                        "scale(1)";
+                        "translate(0px, 0px) scale(1)";
 
                     zoomModal.classList.add(
                         "active"
@@ -1073,9 +1100,11 @@
                         "";
 
                     escalaZoom = 1;
+                    desplazamientoX = 0;
+                    desplazamientoY = 0;
 
                     zoomImage.style.transform =
-                        "scale(1)";
+                        "translate(0px, 0px) scale(1)";
 
                 }
 
@@ -1132,6 +1161,64 @@
                 }
 
 
+                function limitarDesplazamiento() {
+
+                    if (escalaZoom <= 1) {
+
+                        desplazamientoX = 0;
+                        desplazamientoY = 0;
+
+                        return;
+                    }
+
+
+                    const anchoBase =
+                        zoomImage.clientWidth;
+
+                    const altoBase =
+                        zoomImage.clientHeight;
+
+
+                    const maxX =
+                        Math.max(
+                            0,
+                            (
+                                anchoBase *
+                                (escalaZoom - 1)
+                            ) / 2
+                        );
+
+                    const maxY =
+                        Math.max(
+                            0,
+                            (
+                                altoBase *
+                                (escalaZoom - 1)
+                            ) / 2
+                        );
+
+
+                    desplazamientoX =
+                        Math.max(
+                            -maxX,
+                            Math.min(
+                                maxX,
+                                desplazamientoX
+                            )
+                        );
+
+                    desplazamientoY =
+                        Math.max(
+                            -maxY,
+                            Math.min(
+                                maxY,
+                                desplazamientoY
+                            )
+                        );
+
+                }
+
+
                 function aplicarZoom() {
 
                     escalaZoom =
@@ -1143,8 +1230,16 @@
                             )
                         );
 
+
+                    limitarDesplazamiento();
+
+
                     zoomImage.style.transform =
-                        "scale(" +
+                        "translate(" +
+                        desplazamientoX +
+                        "px, " +
+                        desplazamientoY +
+                        "px) scale(" +
                         escalaZoom +
                         ")";
 
@@ -1178,6 +1273,8 @@
                     function () {
 
                         escalaZoom = 1;
+                        desplazamientoX = 0;
+                        desplazamientoY = 0;
                         aplicarZoom();
 
                     }
@@ -1200,6 +1297,334 @@
                     },
                     {
                         passive: false
+                    }
+                );
+
+
+                // =============================
+                // ARRASTRAR ZOOM CON MOUSE
+                // =============================
+
+                zoomImage.addEventListener(
+                    "mousedown",
+                    function (event) {
+
+                        if (escalaZoom <= 1) {
+                            return;
+                        }
+
+
+                        event.preventDefault();
+
+                        arrastrando = true;
+
+                        inicioArrastreX =
+                            event.clientX;
+
+                        inicioArrastreY =
+                            event.clientY;
+
+                        inicioDesplazamientoX =
+                            desplazamientoX;
+
+                        inicioDesplazamientoY =
+                            desplazamientoY;
+
+
+                        zoomImage.classList.add(
+                            "dragging"
+                        );
+
+                    }
+                );
+
+
+                window.addEventListener(
+                    "mousemove",
+                    function (event) {
+
+                        if (!arrastrando) {
+                            return;
+                        }
+
+
+                        desplazamientoX =
+                            inicioDesplazamientoX +
+                            (
+                                event.clientX -
+                                inicioArrastreX
+                            );
+
+                        desplazamientoY =
+                            inicioDesplazamientoY +
+                            (
+                                event.clientY -
+                                inicioArrastreY
+                            );
+
+
+                        aplicarZoom();
+
+                    }
+                );
+
+
+                window.addEventListener(
+                    "mouseup",
+                    function () {
+
+                        arrastrando = false;
+
+                        zoomImage.classList.remove(
+                            "dragging"
+                        );
+
+                    }
+                );
+
+
+                // DOBLE CLIC:
+                // 1x -> 2x -> 1x
+
+                zoomImage.addEventListener(
+                    "dblclick",
+                    function (event) {
+
+                        event.preventDefault();
+
+                        if (escalaZoom > 1) {
+
+                            escalaZoom = 1;
+                            desplazamientoX = 0;
+                            desplazamientoY = 0;
+
+                        } else {
+
+                            escalaZoom = 2;
+
+                        }
+
+
+                        aplicarZoom();
+
+                    }
+                );
+
+
+                // =============================
+                // CELULAR: MOVER + PINCH ZOOM
+                // =============================
+
+                function distanciaEntreToques(
+                    toque1,
+                    toque2
+                ) {
+
+                    const x =
+                        toque2.clientX -
+                        toque1.clientX;
+
+                    const y =
+                        toque2.clientY -
+                        toque1.clientY;
+
+
+                    return Math.hypot(
+                        x,
+                        y
+                    );
+
+                }
+
+
+                zoomImage.addEventListener(
+                    "touchstart",
+                    function (event) {
+
+                        if (
+                            event.touches.length === 2
+                        ) {
+
+                            event.preventDefault();
+
+                            distanciaPinzaInicial =
+                                distanciaEntreToques(
+                                    event.touches[0],
+                                    event.touches[1]
+                                );
+
+                            escalaPinzaInicial =
+                                escalaZoom;
+
+                            arrastrando = false;
+
+                            return;
+                        }
+
+
+                        if (
+                            event.touches.length === 1
+                        ) {
+
+                            const ahora =
+                                Date.now();
+
+
+                            // DOBLE TOQUE PARA ZOOM
+
+                            if (
+                                ahora -
+                                ultimoToque <
+                                300
+                            ) {
+
+                                event.preventDefault();
+
+                                if (escalaZoom > 1) {
+
+                                    escalaZoom = 1;
+                                    desplazamientoX = 0;
+                                    desplazamientoY = 0;
+
+                                } else {
+
+                                    escalaZoom = 2;
+
+                                }
+
+
+                                aplicarZoom();
+
+                                ultimoToque = 0;
+
+                                return;
+                            }
+
+
+                            ultimoToque =
+                                ahora;
+
+
+                            if (escalaZoom <= 1) {
+                                return;
+                            }
+
+
+                            event.preventDefault();
+
+                            arrastrando =
+                                true;
+
+                            inicioArrastreX =
+                                event.touches[0]
+                                    .clientX;
+
+                            inicioArrastreY =
+                                event.touches[0]
+                                    .clientY;
+
+                            inicioDesplazamientoX =
+                                desplazamientoX;
+
+                            inicioDesplazamientoY =
+                                desplazamientoY;
+
+                        }
+
+                    },
+                    {
+                        passive: false
+                    }
+                );
+
+
+                zoomImage.addEventListener(
+                    "touchmove",
+                    function (event) {
+
+                        if (
+                            event.touches.length === 2
+                        ) {
+
+                            event.preventDefault();
+
+
+                            const distanciaActual =
+                                distanciaEntreToques(
+                                    event.touches[0],
+                                    event.touches[1]
+                                );
+
+
+                            if (
+                                distanciaPinzaInicial >
+                                0
+                            ) {
+
+                                escalaZoom =
+                                    escalaPinzaInicial *
+                                    (
+                                        distanciaActual /
+                                        distanciaPinzaInicial
+                                    );
+
+
+                                aplicarZoom();
+
+                            }
+
+
+                            return;
+                        }
+
+
+                        if (
+                            event.touches.length === 1 &&
+                            arrastrando &&
+                            escalaZoom > 1
+                        ) {
+
+                            event.preventDefault();
+
+
+                            desplazamientoX =
+                                inicioDesplazamientoX +
+                                (
+                                    event.touches[0]
+                                        .clientX -
+                                    inicioArrastreX
+                                );
+
+                            desplazamientoY =
+                                inicioDesplazamientoY +
+                                (
+                                    event.touches[0]
+                                        .clientY -
+                                    inicioArrastreY
+                                );
+
+
+                            aplicarZoom();
+
+                        }
+
+                    },
+                    {
+                        passive: false
+                    }
+                );
+
+
+                zoomImage.addEventListener(
+                    "touchend",
+                    function () {
+
+                        arrastrando =
+                            false;
+
+                        distanciaPinzaInicial =
+                            0;
+
                     }
                 );
 
