@@ -237,15 +237,45 @@
             margin-top: 15px;
         }
 
-        .preview img {
-            width: 180px;
-            height: 220px;
+        .preview-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fill, minmax(110px, 1fr));
+            gap: 10px;
+        }
 
-            object-fit: cover;
-
-            display: none;
-
+        .preview-item {
+            position: relative;
+            min-height: 140px;
             background: #eee;
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .preview-item span {
+            position: absolute;
+            left: 6px;
+            bottom: 6px;
+            padding: 4px 6px;
+            background: rgba(0, 0, 0, 0.72);
+            color: white;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .images-help {
+            display: block;
+            margin-top: 8px;
+            color: #777;
+            font-size: 10px;
+            line-height: 1.4;
         }
 
 
@@ -812,22 +842,27 @@
                 <div class="group">
 
                     <label for="imagen">
-                        IMAGEN
+                        IMÁGENES
                     </label>
 
                     <input
                         type="file"
                         id="imagen"
                         accept="image/*"
+                        multiple
                     >
 
+                    <span class="images-help">
+                        Puedes seleccionar varias imágenes a la vez.
+                        La primera será la imagen principal.
+                        Al editar, las nuevas imágenes se añadirán a las actuales.
+                    </span>
+
                     <div class="preview">
-
-                        <img
-                            id="previewImage"
-                            alt="Vista previa"
-                        >
-
+                        <div
+                            class="preview-grid"
+                            id="previewGrid"
+                        ></div>
                     </div>
 
                 </div>
@@ -1009,9 +1044,9 @@
             );
 
 
-        const previewImage =
+        const previewGrid =
             document.getElementById(
-                "previewImage"
+                "previewGrid"
             );
 
 
@@ -1055,8 +1090,8 @@
             null;
 
 
-        let imagenActual =
-            null;
+        let imagenesActuales =
+            [];
 
 
         // =================================
@@ -1203,54 +1238,130 @@
         // VISTA PREVIA
         // =================================
 
+        function normalizarImagenes(producto) {
+
+            let lista = [];
+
+            if (
+                producto &&
+                Array.isArray(producto.imagenes)
+            ) {
+
+                lista =
+                    producto.imagenes.filter(Boolean);
+
+            }
+
+
+            if (
+                producto &&
+                producto.imagen &&
+                !lista.includes(producto.imagen)
+            ) {
+
+                lista.unshift(
+                    producto.imagen
+                );
+
+            }
+
+
+            return [...new Set(lista)];
+
+        }
+
+
+        function renderizarPreviewImagenes() {
+
+            previewGrid.innerHTML =
+                "";
+
+
+            const archivos =
+                Array.from(
+                    imagenInput.files || []
+                );
+
+
+            if (imagenesActuales.length > 0) {
+
+                imagenesActuales.forEach(
+                    function (url, indice) {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+                        item.className =
+                            "preview-item";
+
+                        item.innerHTML = `
+                            <img
+                                src="${url}"
+                                alt="Imagen actual ${indice + 1}"
+                            >
+                            <span>
+                                ${indice === 0
+                                    ? "PRINCIPAL"
+                                    : "ACTUAL"}
+                            </span>
+                        `;
+
+                        previewGrid.appendChild(
+                            item
+                        );
+
+                    }
+                );
+
+            }
+
+
+            archivos.forEach(
+                function (archivo, indice) {
+
+                    const item =
+                        document.createElement(
+                            "div"
+                        );
+
+                    item.className =
+                        "preview-item";
+
+
+                    const urlTemporal =
+                        URL.createObjectURL(
+                            archivo
+                        );
+
+
+                    item.innerHTML = `
+                        <img
+                            src="${urlTemporal}"
+                            alt="Nueva imagen ${indice + 1}"
+                        >
+                        <span>
+                            NUEVA ${indice + 1}
+                        </span>
+                    `;
+
+
+                    previewGrid.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+        }
+
+
         imagenInput.addEventListener(
             "change",
             function () {
 
-                const archivo =
-                    imagenInput.files[0];
-
-
-                if (!archivo) {
-
-                    if (imagenActual) {
-
-                        previewImage.src =
-                            imagenActual;
-
-
-                        previewImage.style.display =
-                            "block";
-
-                    } else {
-
-                        previewImage.src =
-                            "";
-
-
-                        previewImage.style.display =
-                            "none";
-
-                    }
-
-
-                    return;
-
-                }
-
-
-                const urlTemporal =
-                    URL.createObjectURL(
-                        archivo
-                    );
-
-
-                previewImage.src =
-                    urlTemporal;
-
-
-                previewImage.style.display =
-                    "block";
+                renderizarPreviewImagenes();
 
             }
         );
@@ -1330,6 +1441,39 @@
 
 
             return publicData.publicUrl;
+
+        }
+
+
+        // =================================
+        // SUBIR VARIAS IMÁGENES
+        // =================================
+
+        async function subirImagenes(
+            archivos
+        ) {
+
+            const urls =
+                [];
+
+
+            for (
+                const archivo of archivos
+            ) {
+
+                const url =
+                    await subirImagen(
+                        archivo
+                    );
+
+                if (url) {
+                    urls.push(url);
+                }
+
+            }
+
+
+            return urls;
 
         }
 
@@ -1493,13 +1637,23 @@
                         `;
 
 
-                    if (producto.imagen) {
+                    const imagenPrincipal =
+                        producto.imagen ||
+                        (
+                            Array.isArray(producto.imagenes) &&
+                            producto.imagenes.length > 0
+                                ? producto.imagenes[0]
+                                : null
+                        );
+
+
+                    if (imagenPrincipal) {
 
                         imagenHTML =
                             `
                                 <img
                                     class="product-image"
-                                    src="${escaparTexto(producto.imagen)}"
+                                    src="${escaparTexto(imagenPrincipal)}"
                                     alt="${escaparTexto(producto.nombre)}"
                                 >
                             `;
@@ -1694,8 +1848,10 @@
                 producto.id;
 
 
-            imagenActual =
-                producto.imagen || null;
+            imagenesActuales =
+                normalizarImagenes(
+                    producto
+                );
 
 
             document
@@ -1749,26 +1905,7 @@
             imagenInput.value =
                 "";
 
-
-            if (imagenActual) {
-
-                previewImage.src =
-                    imagenActual;
-
-
-                previewImage.style.display =
-                    "block";
-
-            } else {
-
-                previewImage.src =
-                    "";
-
-
-                previewImage.style.display =
-                    "none";
-
-            }
+            renderizarPreviewImagenes();
 
 
             formTitle.textContent =
@@ -1824,8 +1961,8 @@
                 null;
 
 
-            imagenActual =
-                null;
+            imagenesActuales =
+                [];
 
 
             productForm.reset();
@@ -1842,13 +1979,8 @@
             imagenInput.value =
                 "";
 
-
-            previewImage.src =
+            previewGrid.innerHTML =
                 "";
-
-
-            previewImage.style.display =
-                "none";
 
 
             formTitle.textContent =
@@ -1966,8 +2098,10 @@
                             .checked;
 
 
-                    const archivo =
-                        imagenInput.files[0];
+                    const archivos =
+                        Array.from(
+                            imagenInput.files || []
+                        );
 
 
                     // VALIDACIONES
@@ -2008,20 +2142,40 @@
                     }
 
 
-                    let urlImagen =
-                        imagenActual;
+                    let urlsImagenes =
+                        [...imagenesActuales];
 
 
-                    // NUEVA IMAGEN
+                    // NUEVAS IMÁGENES
 
-                    if (archivo) {
+                    if (archivos.length > 0) {
 
-                        urlImagen =
-                            await subirImagen(
-                                archivo
+                        const nuevasUrls =
+                            await subirImagenes(
+                                archivos
                             );
 
+                        urlsImagenes =
+                            [
+                                ...urlsImagenes,
+                                ...nuevasUrls
+                            ];
+
                     }
+
+
+                    urlsImagenes =
+                        [
+                            ...new Set(
+                                urlsImagenes.filter(Boolean)
+                            )
+                        ];
+
+
+                    const urlImagenPrincipal =
+                        urlsImagenes.length > 0
+                            ? urlsImagenes[0]
+                            : null;
 
 
                     // =========================
@@ -2053,7 +2207,10 @@
                                         stock,
 
                                     imagen:
-                                        urlImagen,
+                                        urlImagenPrincipal,
+
+                                    imagenes:
+                                        urlsImagenes,
 
                                     activo:
                                         activo
@@ -2124,7 +2281,10 @@
                                             stock,
 
                                         imagen:
-                                            urlImagen,
+                                            urlImagenPrincipal,
+
+                                        imagenes:
+                                            urlsImagenes,
 
                                         activo:
                                             activo
