@@ -154,6 +154,7 @@
         }
 
         @media (max-width: 600px) {
+
             .topbar {
                 height: 65px;
             }
@@ -269,13 +270,19 @@
 
 
         const form =
-            document.getElementById("passwordForm");
+            document.getElementById(
+                "passwordForm"
+            );
 
         const message =
-            document.getElementById("message");
+            document.getElementById(
+                "message"
+            );
 
         const changeButton =
-            document.getElementById("changeButton");
+            document.getElementById(
+                "changeButton"
+            );
 
 
         form.addEventListener(
@@ -287,22 +294,32 @@
 
                 const password =
                     document
-                        .getElementById("password")
+                        .getElementById(
+                            "password"
+                        )
                         .value;
+
 
                 const confirmPassword =
                     document
-                        .getElementById("confirmPassword")
+                        .getElementById(
+                            "confirmPassword"
+                        )
                         .value;
 
 
-                message.className = "message";
-                message.textContent = "";
+                message.className =
+                    "message";
+
+                message.textContent =
+                    "";
 
 
                 if (password.length < 6) {
 
-                    message.classList.add("error");
+                    message.classList.add(
+                        "error"
+                    );
 
                     message.textContent =
                         "La contraseña debe tener mínimo 6 caracteres.";
@@ -311,9 +328,14 @@
                 }
 
 
-                if (password !== confirmPassword) {
+                if (
+                    password !==
+                    confirmPassword
+                ) {
 
-                    message.classList.add("error");
+                    message.classList.add(
+                        "error"
+                    );
 
                     message.textContent =
                         "Las contraseñas no coinciden.";
@@ -322,28 +344,34 @@
                 }
 
 
-                changeButton.disabled = true;
+                changeButton.disabled =
+                    true;
 
                 changeButton.textContent =
                     "CAMBIANDO...";
 
 
-                const { data, error } =
-                    await clienteSupabase.auth.updateUser({
-                        password: password
-                    });
+                const { error } =
+                    await clienteSupabase.auth
+                        .updateUser({
+                            password:
+                                password
+                        });
 
 
                 if (error) {
 
                     console.error(error);
 
-                    message.classList.add("error");
+                    message.classList.add(
+                        "error"
+                    );
 
                     message.textContent =
-                        "No se pudo cambiar la contraseña. Abre nuevamente el enlace de recuperación de tu correo.";
+                        "No se pudo cambiar la contraseña. Solicita un enlace nuevo.";
 
-                    changeButton.disabled = false;
+                    changeButton.disabled =
+                        false;
 
                     changeButton.textContent =
                         "CAMBIAR CONTRASEÑA";
@@ -352,10 +380,16 @@
                 }
 
 
-                message.classList.add("success");
+                message.classList.add(
+                    "success"
+                );
 
                 message.textContent =
                     "Contraseña cambiada correctamente. Redirigiendo al inicio de sesión...";
+
+
+                await clienteSupabase.auth
+                    .signOut();
 
 
                 setTimeout(
