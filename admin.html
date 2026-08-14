@@ -270,6 +270,29 @@
             letter-spacing: 0.5px;
         }
 
+        .preview-remove {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            z-index: 3;
+            width: 30px;
+            height: 30px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.78);
+            color: white;
+            font-size: 19px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .preview-remove:hover {
+            background: #b91c1c;
+        }
+
         .images-help {
             display: block;
             margin-top: 8px;
@@ -855,7 +878,7 @@
                     <span class="images-help">
                         Puedes seleccionar varias imágenes a la vez.
                         La primera será la imagen principal.
-                        Al editar, las nuevas imágenes se añadirán a las actuales.
+                        Al editar puedes agregar o eliminar imágenes antes de guardar.
                     </span>
 
                     <div class="preview">
@@ -1094,6 +1117,10 @@
             [];
 
 
+        let archivosNuevos =
+            [];
+
+
         // =================================
         // VERIFICAR ADMIN
         // =================================
@@ -1277,48 +1304,100 @@
                 "";
 
 
-            const archivos =
-                Array.from(
-                    imagenInput.files || []
-                );
+            imagenesActuales.forEach(
+                function (url, indice) {
 
-
-            if (imagenesActuales.length > 0) {
-
-                imagenesActuales.forEach(
-                    function (url, indice) {
-
-                        const item =
-                            document.createElement(
-                                "div"
-                            );
-
-                        item.className =
-                            "preview-item";
-
-                        item.innerHTML = `
-                            <img
-                                src="${url}"
-                                alt="Imagen actual ${indice + 1}"
-                            >
-                            <span>
-                                ${indice === 0
-                                    ? "PRINCIPAL"
-                                    : "ACTUAL"}
-                            </span>
-                        `;
-
-                        previewGrid.appendChild(
-                            item
+                    const item =
+                        document.createElement(
+                            "div"
                         );
 
-                    }
-                );
-
-            }
+                    item.className =
+                        "preview-item";
 
 
-            archivos.forEach(
+                    const imagen =
+                        document.createElement(
+                            "img"
+                        );
+
+                    imagen.src =
+                        url;
+
+                    imagen.alt =
+                        "Imagen actual " +
+                        (indice + 1);
+
+
+                    const etiqueta =
+                        document.createElement(
+                            "span"
+                        );
+
+                    etiqueta.textContent =
+                        indice === 0
+                            ? "PRINCIPAL"
+                            : "ACTUAL";
+
+
+                    const eliminar =
+                        document.createElement(
+                            "button"
+                        );
+
+                    eliminar.type =
+                        "button";
+
+                    eliminar.className =
+                        "preview-remove";
+
+                    eliminar.textContent =
+                        "×";
+
+                    eliminar.title =
+                        "Eliminar imagen";
+
+
+                    eliminar.addEventListener(
+                        "click",
+                        function () {
+
+                            const confirmar =
+                                confirm(
+                                    "¿Quitar esta imagen del producto?"
+                                );
+
+
+                            if (!confirmar) {
+                                return;
+                            }
+
+
+                            imagenesActuales.splice(
+                                indice,
+                                1
+                            );
+
+
+                            renderizarPreviewImagenes();
+
+                        }
+                    );
+
+
+                    item.appendChild(imagen);
+                    item.appendChild(etiqueta);
+                    item.appendChild(eliminar);
+
+                    previewGrid.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+
+            archivosNuevos.forEach(
                 function (archivo, indice) {
 
                     const item =
@@ -1330,22 +1409,91 @@
                         "preview-item";
 
 
+                    const imagen =
+                        document.createElement(
+                            "img"
+                        );
+
                     const urlTemporal =
                         URL.createObjectURL(
                             archivo
                         );
 
 
-                    item.innerHTML = `
-                        <img
-                            src="${urlTemporal}"
-                            alt="Nueva imagen ${indice + 1}"
-                        >
-                        <span>
-                            NUEVA ${indice + 1}
-                        </span>
-                    `;
+                    imagen.src =
+                        urlTemporal;
 
+                    imagen.alt =
+                        "Nueva imagen " +
+                        (indice + 1);
+
+
+                    imagen.addEventListener(
+                        "load",
+                        function () {
+
+                            URL.revokeObjectURL(
+                                urlTemporal
+                            );
+
+                        },
+                        {
+                            once: true
+                        }
+                    );
+
+
+                    const etiqueta =
+                        document.createElement(
+                            "span"
+                        );
+
+                    etiqueta.textContent =
+                        (
+                            imagenesActuales.length === 0 &&
+                            indice === 0
+                        )
+                            ? "PRINCIPAL"
+                            : "NUEVA";
+
+
+                    const eliminar =
+                        document.createElement(
+                            "button"
+                        );
+
+                    eliminar.type =
+                        "button";
+
+                    eliminar.className =
+                        "preview-remove";
+
+                    eliminar.textContent =
+                        "×";
+
+                    eliminar.title =
+                        "Quitar imagen nueva";
+
+
+                    eliminar.addEventListener(
+                        "click",
+                        function () {
+
+                            archivosNuevos.splice(
+                                indice,
+                                1
+                            );
+
+
+                            renderizarPreviewImagenes();
+
+                        }
+                    );
+
+
+                    item.appendChild(imagen);
+                    item.appendChild(etiqueta);
+                    item.appendChild(eliminar);
 
                     previewGrid.appendChild(
                         item
@@ -1360,6 +1508,12 @@
         imagenInput.addEventListener(
             "change",
             function () {
+
+                archivosNuevos =
+                    Array.from(
+                        imagenInput.files || []
+                    );
+
 
                 renderizarPreviewImagenes();
 
@@ -1905,6 +2059,9 @@
             imagenInput.value =
                 "";
 
+            archivosNuevos =
+                [];
+
             renderizarPreviewImagenes();
 
 
@@ -1962,6 +2119,10 @@
 
 
             imagenesActuales =
+                [];
+
+
+            archivosNuevos =
                 [];
 
 
@@ -2099,9 +2260,7 @@
 
 
                     const archivos =
-                        Array.from(
-                            imagenInput.files || []
-                        );
+                        [...archivosNuevos];
 
 
                     // VALIDACIONES
