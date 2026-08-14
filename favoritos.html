@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Favoritos | KYRO</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f5;
+            color: #111;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .topbar {
+            height: 78px;
+            background: #050505;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+
+            padding: 0 30px;
+        }
+
+        .back {
+            position: absolute;
+            left: 30px;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .page {
+            padding: 65px 30px 90px;
+        }
+
+        .page-header {
+            margin-bottom: 40px;
+        }
+
+        .page-header p {
+            font-size: 10px;
+            color: #777;
+            letter-spacing: 2px;
+
+            margin-bottom: 12px;
+        }
+
+        .page-header h1 {
+            font-size: 38px;
+            font-weight: 500;
+            letter-spacing: -1.5px;
+        }
+
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 8px;
+        }
+
+        .favorite-card {
+            background: white;
+        }
+
+        .favorite-image {
+            width: 100%;
+            aspect-ratio: 1 / 1.15;
+
+            background: #e9e9e7;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .favorite-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .no-image {
+            color: #999;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .favorite-info {
+            padding: 15px 12px 18px;
+        }
+
+        .category {
+            font-size: 9px;
+            color: #888;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 8px;
+        }
+
+        .name {
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 7px;
+        }
+
+        .description {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.5;
+
+            min-height: 32px;
+
+            margin-bottom: 13px;
+        }
+
+        .bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 14px;
+        }
+
+        .price {
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .stock {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.7px;
+        }
+
+        .available {
+            color: #166534;
+        }
+
+        .sold-out {
+            color: #b91c1c;
+        }
+
+        .card-buttons {
+            display: flex;
+            flex-direction: column;
+
+            gap: 7px;
+        }
+
+        .view-button,
+        .remove-button {
+            width: 100%;
+            height: 42px;
+
+            border: 1px solid #111;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
+
+            transition: 0.25s;
+        }
+
+        .view-button {
+            background: #111;
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .view-button:hover {
+            background: #333;
+        }
+
+        .remove-button {
+            background: transparent;
+            color: #111;
+        }
+
+        .remove-button:hover {
+            background: #111;
+            color: white;
+        }
+
+        .empty {
+            padding: 100px 20px;
+
+            text-align: center;
+        }
+
+        .empty h2 {
+            font-size: 26px;
+            font-weight: 500;
+
+            margin-bottom: 15px;
+        }
+
+        .empty p {
+            font-size: 13px;
+            color: #777;
+
+            margin-bottom: 25px;
+        }
+
+        .empty a {
+            display: inline-flex;
+
+            height: 46px;
+
+            padding: 0 25px;
+
+            border: 1px solid #111;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .empty a:hover {
+            background: #111;
+            color: white;
+        }
+
+        @media (max-width: 1000px) {
+            .favorites-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                height: 65px;
+            }
+
+            .back {
+                left: 18px;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+
+            .page {
+                padding: 45px 10px 70px;
+            }
+
+            .page-header {
+                padding: 0 6px;
+            }
+
+            .page-header h1 {
+                font-size: 31px;
+            }
+
+            .favorites-grid {
+                grid-template-columns: repeat(2, 1fr);
+
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a href="index.html" class="back">
+            ← VOLVER
+        </a>
+
+        <a href="index.html" class="logo">
+            KYRO
+        </a>
+
+    </header>
+
+
+    <main class="page">
+
+        <div class="page-header">
+
+            <p>KYRO STORE</p>
+
+            <h1>
+                TUS FAVORITOS
+            </h1>
+
+        </div>
+
+
+        <div id="favoritesContainer"></div>
+
+    </main>
+
+
+    <script>
+
+        const favoritesContainer =
+            document.getElementById(
+                "favoritesContainer"
+            );
+
+
+        function obtenerFavoritos() {
+
+            return (
+                JSON.parse(
+                    localStorage.getItem(
+                        "favoritosKYRO"
+                    )
+                ) || []
+            );
+
+        }
+
+
+        function guardarFavoritos(
+            favoritos
+        ) {
+
+            localStorage.setItem(
+                "favoritosKYRO",
+                JSON.stringify(
+                    favoritos
+                )
+            );
+
+        }
+
+
+        function renderizarFavoritos() {
+
+            const favoritos =
+                obtenerFavoritos();
+
+
+            if (
+                favoritos.length === 0
+            ) {
+
+                favoritesContainer.innerHTML = `
+
+                    <div class="empty">
+
+                        <h2>
+                            TODAVÍA NO TIENES FAVORITOS
+                        </h2>
+
+                        <p>
+                            Guarda los productos que más te gusten.
+                        </p>
+
+                        <a href="catalogo.html">
+                            VER PRODUCTOS
+                        </a>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            let html = `
+                <div class="favorites-grid">
+            `;
+
+
+            favoritos.forEach(
+                function (
+                    producto,
+                    index
+                ) {
+
+                    const precio =
+                        Number(
+                            producto.precio
+                        ).toFixed(2);
+
+
+                    const stockDisponible =
+                        Number(
+                            producto.stock
+                        ) > 0;
+
+
+                    let imagenHTML = `
+
+                        <span class="no-image">
+                            SIN IMAGEN
+                        </span>
+
+                    `;
+
+
+                    if (producto.imagen) {
+
+                        imagenHTML = `
+
+                            <img
+                                src="${producto.imagen}"
+                                alt="${producto.nombre}"
+                            >
+
+                        `;
+
+                    }
+
+
+                    html += `
+
+                        <article class="favorite-card">
+
+                            <div class="favorite-image">
+
+                                ${imagenHTML}
+
+                            </div>
+
+
+                            <div class="favorite-info">
+
+                                <p class="category">
+                                    ${
+                                        producto.categoria ||
+                                        "Producto"
+                                    }
+                                </p>
+
+
+                                <h2 class="name">
+                                    ${producto.nombre}
+                                </h2>
+
+
+                                <p class="description">
+                                    ${
+                                        producto.descripcion ||
+                                        ""
+                                    }
+                                </p>
+
+
+                                <div class="bottom">
+
+                                    <span class="price">
+                                        $${precio}
+                                    </span>
+
+
+                                    <span class="
+                                        stock
+                                        ${
+                                            stockDisponible
+                                                ? "available"
+                                                : "sold-out"
+                                        }
+                                    ">
+
+                                        ${
+                                            stockDisponible
+                                                ? `EN STOCK (${producto.stock})`
+                                                : "AGOTADO"
+                                        }
+
+                                    </span>
+
+                                </div>
+
+
+                                <div class="card-buttons">
+
+                                    <a
+                                        href="producto.html?id=${producto.id}"
+                                        class="view-button"
+                                    >
+                                        VER PRODUCTO
+                                    </a>
+
+
+                                    <button
+                                        class="remove-button"
+                                        onclick="quitarFavorito(${index})"
+                                    >
+                                        QUITAR DE FAVORITOS
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </article>
+
+                    `;
+
+                }
+            );
+
+
+            html += `
+                </div>
+            `;
+
+
+            favoritesContainer.innerHTML =
+                html;
+
+        }
+
+
+        function quitarFavorito(
+            index
+        ) {
+
+            const favoritos =
+                obtenerFavoritos();
+
+
+            favoritos.splice(
+                index,
+                1
+            );
+
+
+            guardarFavoritos(
+                favoritos
+            );
+
+
+            renderizarFavoritos();
+
+        }
+
+
+        renderizarFavoritos();
+
+    </script>
+
+</body>
+</html>

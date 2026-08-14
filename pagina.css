@@ -1,0 +1,955 @@
+/* =========================
+          GENERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+body {
+    width: 100%;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #000;
+
+    color: white;
+}
+
+
+a {
+    color: inherit;
+
+    text-decoration: none;
+}
+
+
+button {
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+
+
+/* =========================
+           NAVBAR
+========================= */
+
+.navbar {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    z-index: 1000;
+
+    width: 100%;
+    height: 78px;
+
+    padding: 0 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    color: white;
+}
+
+
+.nav-left,
+.nav-right {
+    display: flex;
+
+    align-items: center;
+}
+
+
+.nav-left {
+    gap: 30px;
+}
+
+
+.nav-right {
+    gap: 23px;
+}
+
+
+
+/* =========================
+           LINKS
+========================= */
+
+.nav-link {
+    position: relative;
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+    white-space: nowrap;
+}
+
+
+.nav-link::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    bottom: -5px;
+
+    width: 0;
+
+    height: 1px;
+
+    background: white;
+
+    transition: width 0.3s ease;
+}
+
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+
+
+/* =========================
+            LOGO
+========================= */
+
+.logo {
+    position: absolute;
+
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    font-size: 30px;
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+}
+
+
+
+/* =========================
+       BOTÓN MENÚ MÓVIL
+========================= */
+
+.mobile-menu-button {
+    display: none;
+
+    width: 24px;
+    height: 24px;
+
+    border: none;
+
+    background: transparent;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: center;
+
+    gap: 5px;
+
+    padding: 0;
+}
+
+
+.mobile-menu-button span {
+    display: block;
+
+    width: 20px;
+
+    height: 1px;
+
+    background: white;
+}
+
+
+
+/* =========================
+           ICONOS
+========================= */
+
+.icon-button {
+    position: relative;
+
+    width: 22px;
+
+    height: 22px;
+
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.icon-button svg {
+    width: 20px;
+
+    height: 20px;
+
+    fill: none;
+
+    stroke: currentColor;
+
+    stroke-width: 1.5;
+
+    stroke-linecap: round;
+
+    stroke-linejoin: round;
+}
+
+
+.cart-count {
+    position: absolute;
+
+    top: -9px;
+
+    right: -9px;
+
+    width: 16px;
+
+    height: 16px;
+
+    border-radius: 50%;
+
+    background: white;
+
+    color: black;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 9px;
+}
+
+
+
+/* =========================
+         MENÚ MÓVIL
+========================= */
+
+.mobile-menu {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    z-index: 5000;
+
+    width: 100%;
+
+    height: 100vh;
+    height: 100dvh;
+
+    padding: 0 25px 35px;
+
+    background: #050505;
+
+    color: white;
+
+    transform:
+        translateX(-100%);
+
+    visibility: hidden;
+
+    transition:
+        transform 0.35s ease,
+        visibility 0.35s;
+}
+
+
+.mobile-menu.active {
+    transform:
+        translateX(0);
+
+    visibility: visible;
+}
+
+
+.mobile-menu-top {
+    width: 100%;
+
+    height: 75px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom:
+        1px solid #222;
+}
+
+
+.mobile-logo {
+    font-size: 27px;
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+}
+
+
+.mobile-menu-close {
+    width: 38px;
+
+    height: 38px;
+
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    font-size: 32px;
+
+    font-weight: 300;
+
+    line-height: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.mobile-menu-links {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.mobile-menu-links a {
+    width: 100%;
+
+    min-height: 58px;
+
+    display: flex;
+
+    align-items: center;
+
+    border-bottom:
+        1px solid #1c1c1c;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+}
+
+
+.mobile-menu-links a:active {
+    opacity: 0.6;
+}
+
+
+.mobile-menu-divider {
+    height: 30px;
+}
+
+
+.mobile-menu-links
+.mobile-account {
+    font-size: 12px;
+}
+
+
+
+/* =========================
+            HERO
+========================= */
+
+.hero {
+    width: 100%;
+
+    height: 100vh;
+
+    min-height: 650px;
+
+    display: flex;
+
+    background: black;
+}
+
+
+
+/* =========================
+       MITADES DEL HERO
+========================= */
+
+.hero-panel {
+    position: relative;
+
+    width: 50%;
+
+    height: 100%;
+
+    overflow: hidden;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    background-size: cover;
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+}
+
+
+
+/* =========================
+           IMÁGENES
+========================= */
+
+.hero-left {
+    background-image:
+        url("foto1.jpg");
+}
+
+
+.hero-right {
+    background-image:
+        url("foto2.jpg");
+}
+
+
+
+/* =========================
+           OVERLAY
+========================= */
+
+.overlay {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.48) 0%,
+            rgba(0, 0, 0, 0.05) 60%,
+            rgba(0, 0, 0, 0.12) 100%
+        );
+
+    transition:
+        0.4s ease;
+}
+
+
+.hero-panel:hover .overlay {
+    background:
+        linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.35) 0%,
+            rgba(0, 0, 0, 0.02) 60%,
+            rgba(0, 0, 0, 0.08) 100%
+        );
+}
+
+
+
+/* =========================
+          CONTENIDO
+========================= */
+
+.hero-content {
+    position: relative;
+
+    z-index: 5;
+
+    width: 100%;
+
+    padding-left: 8%;
+
+    padding-bottom: 85px;
+
+    color: white;
+}
+
+
+.hero-small {
+    margin-bottom: 12px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    letter-spacing: 1.5px;
+}
+
+
+.hero-content h1 {
+    margin-bottom: 22px;
+
+    font-size:
+        clamp(
+            38px,
+            4vw,
+            60px
+        );
+
+    font-weight: 700;
+
+    letter-spacing: -2px;
+
+    line-height: 1;
+}
+
+
+
+/* =========================
+           BOTONES
+========================= */
+
+.hero-buttons {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.hero-button {
+    min-width: 125px;
+
+    height: 43px;
+
+    padding: 0 23px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+
+    background:
+        rgba(
+            20,
+            20,
+            20,
+            0.45
+        );
+
+    color: white;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.8px;
+
+    transition:
+        0.3s ease;
+}
+
+
+.hero-button:hover {
+    background: white;
+
+    color: black;
+
+    border-color: white;
+}
+
+
+
+/* =========================
+           BUSCADOR
+========================= */
+
+.search-panel {
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    z-index: 6000;
+
+    width: 100%;
+
+    height: 110px;
+
+    padding: 0 40px;
+
+    background: white;
+
+    display: flex;
+
+    align-items: center;
+
+    transform:
+        translateY(-110%);
+
+    transition:
+        transform 0.35s ease;
+}
+
+
+.search-panel.active {
+    transform:
+        translateY(0);
+}
+
+
+.search-box {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    border-bottom:
+        1px solid black;
+}
+
+
+.search-box input {
+    flex: 1;
+
+    height: 60px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: black;
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
+}
+
+
+.search-close {
+    width: 60px;
+
+    height: 60px;
+
+    border: none;
+
+    background: transparent;
+
+    color: black;
+
+    font-size: 34px;
+}
+
+
+
+/* =========================
+             FINAL
+========================= */
+
+.footer {
+    width: 100%;
+
+    height: 350px;
+
+    background: #050505;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.footer h2 {
+    font-size:
+        clamp(
+            80px,
+            15vw,
+            210px
+        );
+
+    font-weight: 900;
+
+    letter-spacing: -9px;
+
+    line-height: 1;
+}
+
+
+
+/* =========================
+           TABLET
+========================= */
+
+@media (max-width: 1100px) {
+
+    .nav-right
+    .nav-link {
+        display: none;
+    }
+
+}
+
+
+
+/* =========================
+           MÓVIL
+========================= */
+
+@media (max-width: 768px) {
+
+
+    /* NAVBAR */
+
+    .navbar {
+        height: 65px;
+
+        padding:
+            0
+            18px;
+
+        display: grid;
+
+        grid-template-columns:
+            35px
+            1fr
+            auto;
+
+        align-items: center;
+    }
+
+
+    .mobile-menu-button {
+        display: flex;
+
+        justify-self: start;
+    }
+
+
+    .nav-left {
+        display: none;
+    }
+
+
+    .logo {
+        position: static;
+
+        transform: none;
+
+        justify-self: center;
+
+        font-size: 25px;
+    }
+
+
+    .nav-right {
+        justify-self: end;
+
+        gap: 15px;
+    }
+
+
+    .nav-right
+    .nav-link {
+        display: none;
+    }
+
+
+
+    /* MENÚ MÓVIL */
+
+    .mobile-menu {
+        padding:
+            0
+            22px
+            30px;
+    }
+
+
+    .mobile-menu-top {
+        height: 65px;
+    }
+
+
+
+    /* HERO */
+
+    .hero {
+        height: auto;
+
+        min-height: 0;
+
+        flex-direction: column;
+    }
+
+
+    .hero-panel {
+        width: 100%;
+
+        height: 82vh;
+
+        min-height: 560px;
+    }
+
+
+    .hero-content {
+        padding-left: 25px;
+
+        padding-bottom: 50px;
+    }
+
+
+    .hero-content h1 {
+        font-size: 42px;
+    }
+
+
+
+    /* BUSCADOR */
+
+    .search-panel {
+        height: 90px;
+
+        padding:
+            0
+            20px;
+    }
+
+
+
+    /* FOOTER */
+
+    .footer {
+        height: 240px;
+    }
+
+
+    .footer h2 {
+        letter-spacing: -4px;
+    }
+
+}
+
+
+
+/* =========================
+        TELÉFONOS PEQUEÑOS
+========================= */
+
+@media (max-width: 400px) {
+
+    .navbar {
+        padding:
+            0
+            13px;
+
+        grid-template-columns:
+            30px
+            1fr
+            auto;
+    }
+
+
+    .nav-right {
+        gap: 11px;
+    }
+
+
+    .icon-button {
+        width: 20px;
+        height: 20px;
+    }
+
+
+    .icon-button svg {
+        width: 18px;
+        height: 18px;
+    }
+
+
+    .hero-content {
+        padding-left: 20px;
+
+        padding-right: 20px;
+
+        padding-bottom: 45px;
+    }
+
+
+    .hero-content h1 {
+        font-size: 38px;
+    }
+
+
+    .hero-button {
+        min-width: 110px;
+
+        padding:
+            0
+            17px;
+    }
+
+
+    .mobile-menu {
+        padding:
+            0
+            18px
+            25px;
+    }
+
+}

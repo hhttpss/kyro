@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nueva contraseña | KYRO</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #050505;
+            color: white;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .topbar {
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #222;
+            position: relative;
+        }
+
+        .back {
+            position: absolute;
+            left: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .page {
+            min-height: calc(100vh - 78px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
+
+        .box {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .box p {
+            font-size: 10px;
+            color: #888;
+            letter-spacing: 2px;
+            margin-bottom: 14px;
+        }
+
+        .box h1 {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: -1.5px;
+            margin-bottom: 14px;
+        }
+
+        .description {
+            display: block;
+            color: #aaa;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 50px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #555;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            border-bottom-color: white;
+        }
+
+        .change-button {
+            width: 100%;
+            height: 52px;
+            margin-top: 15px;
+            border: 1px solid white;
+            background: white;
+            color: black;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .change-button:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .change-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px;
+            font-size: 12px;
+        }
+
+        .message.error {
+            display: block;
+            color: #ffb4b4;
+            border: 1px solid #6b2525;
+        }
+
+        .message.success {
+            display: block;
+            color: #b9ffc7;
+            border: 1px solid #236b35;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                height: 65px;
+            }
+
+            .back {
+                left: 18px;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+
+            .box h1 {
+                font-size: 31px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a href="login.html" class="back">
+            ← VOLVER
+        </a>
+
+        <a href="index.html" class="logo">
+            KYRO
+        </a>
+
+    </header>
+
+    <main class="page">
+
+        <section class="box">
+
+            <p>KYRO ACCOUNT</p>
+
+            <h1>NUEVA CONTRASEÑA</h1>
+
+            <span class="description">
+                Escribe tu nueva contraseña para recuperar el acceso a tu cuenta.
+            </span>
+
+            <div
+                id="message"
+                class="message"
+            ></div>
+
+            <form id="passwordForm">
+
+                <div class="form-group">
+
+                    <label for="password">
+                        NUEVA CONTRASEÑA
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        CONFIRMAR CONTRASEÑA
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        minlength="6"
+                        required
+                    >
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="change-button"
+                    id="changeButton"
+                >
+                    CAMBIAR CONTRASEÑA
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://nhdjeagtkziidkiewttf.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_65y75qbjj3WJxlSEG4d6Nw_8ipgOePE";
+
+        const clienteSupabase =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        const form =
+            document.getElementById("passwordForm");
+
+        const message =
+            document.getElementById("message");
+
+        const changeButton =
+            document.getElementById("changeButton");
+
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+                const confirmPassword =
+                    document
+                        .getElementById("confirmPassword")
+                        .value;
+
+
+                message.className = "message";
+                message.textContent = "";
+
+
+                if (password.length < 6) {
+
+                    message.classList.add("error");
+
+                    message.textContent =
+                        "La contraseña debe tener mínimo 6 caracteres.";
+
+                    return;
+                }
+
+
+                if (password !== confirmPassword) {
+
+                    message.classList.add("error");
+
+                    message.textContent =
+                        "Las contraseñas no coinciden.";
+
+                    return;
+                }
+
+
+                changeButton.disabled = true;
+
+                changeButton.textContent =
+                    "CAMBIANDO...";
+
+
+                const { data, error } =
+                    await clienteSupabase.auth.updateUser({
+                        password: password
+                    });
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    message.classList.add("error");
+
+                    message.textContent =
+                        "No se pudo cambiar la contraseña. Abre nuevamente el enlace de recuperación de tu correo.";
+
+                    changeButton.disabled = false;
+
+                    changeButton.textContent =
+                        "CAMBIAR CONTRASEÑA";
+
+                    return;
+                }
+
+
+                message.classList.add("success");
+
+                message.textContent =
+                    "Contraseña cambiada correctamente. Redirigiendo al inicio de sesión...";
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "login.html";
+
+                    },
+                    1800
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

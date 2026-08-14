@@ -1,0 +1,515 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Registrarse | KYRO</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #050505;
+            color: white;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topbar {
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #222;
+            position: relative;
+        }
+
+        .back {
+            position: absolute;
+            left: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .register-page {
+            min-height: calc(100vh - 78px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .register-box {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .register-header {
+            margin-bottom: 40px;
+        }
+
+        .register-header p {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 14px;
+        }
+
+        .register-header h1 {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: -1.5px;
+            margin-bottom: 14px;
+        }
+
+        .register-header span {
+            font-size: 13px;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 48px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #555;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            border-bottom-color: white;
+        }
+
+        .register-button {
+            width: 100%;
+            height: 52px;
+            margin-top: 15px;
+            border: 1px solid white;
+            background: white;
+            color: black;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .register-button:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .register-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px;
+            font-size: 12px;
+            border: 1px solid #333;
+        }
+
+        .message.error {
+            display: block;
+            color: #ffb4b4;
+            border-color: #6b2525;
+        }
+
+        .message.success {
+            display: block;
+            color: #b9ffc7;
+            border-color: #236b35;
+        }
+
+        .login-link {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .login-link a {
+            color: white;
+            border-bottom: 1px solid white;
+        }
+
+        @media (max-width: 600px) {
+            .topbar {
+                height: 65px;
+            }
+
+            .back {
+                left: 18px;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <a href="index.html" class="back">
+            ← VOLVER
+        </a>
+
+        <a href="index.html" class="logo">
+            KYRO
+        </a>
+    </header>
+
+    <main class="register-page">
+
+        <section class="register-box">
+
+            <div class="register-header">
+                <p>KYRO ACCOUNT</p>
+
+                <h1>CREAR CUENTA</h1>
+
+                <span>
+                    Regístrate para guardar tus datos,
+                    favoritos y pedidos.
+                </span>
+            </div>
+
+            <div
+                class="message"
+                id="message"
+            ></div>
+
+            <form id="registerForm">
+
+                <div class="form-group">
+                    <label for="nombre">
+                        NOMBRE
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombre"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido">
+                        APELLIDO
+                    </label>
+
+                    <input
+                        type="text"
+                        id="apellido"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="correo">
+                        CORREO ELECTRÓNICO
+                    </label>
+
+                    <input
+                        type="email"
+                        id="correo"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">
+                        TELÉFONO
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="telefono"
+                        maxlength="10"
+                        placeholder="09XXXXXXXX"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        CONTRASEÑA
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        minlength="6"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        CONFIRMAR CONTRASEÑA
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        minlength="6"
+                        required
+                    >
+                </div>
+
+                <button
+                    type="submit"
+                    class="register-button"
+                    id="registerButton"
+                >
+                    CREAR CUENTA
+                </button>
+
+            </form>
+
+            <div class="login-link">
+                ¿Ya tienes una cuenta?
+                <a href="login.html">
+                    Iniciar sesión
+                </a>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://nhdjeagtkziidkiewttf.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_65y75qbjj3WJxlSEG4d6Nw_8ipgOePE";
+
+        const clienteSupabase =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        const form =
+            document.getElementById("registerForm");
+
+        const message =
+            document.getElementById("message");
+
+        const registerButton =
+            document.getElementById("registerButton");
+
+        const telefono =
+            document.getElementById("telefono");
+
+
+        telefono.addEventListener("input", function () {
+            this.value =
+                this.value.replace(/\D/g, "");
+        });
+
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const nombre =
+                    document
+                        .getElementById("nombre")
+                        .value
+                        .trim();
+
+                const apellido =
+                    document
+                        .getElementById("apellido")
+                        .value
+                        .trim();
+
+                const correo =
+                    document
+                        .getElementById("correo")
+                        .value
+                        .trim();
+
+                const telefonoValor =
+                    document
+                        .getElementById("telefono")
+                        .value
+                        .trim();
+
+                const password =
+                    document
+                        .getElementById("password")
+                        .value;
+
+                const confirmPassword =
+                    document
+                        .getElementById("confirmPassword")
+                        .value;
+
+
+                message.className = "message";
+                message.textContent = "";
+
+
+                if (telefonoValor.length !== 10) {
+
+                    message.classList.add("error");
+
+                    message.textContent =
+                        "El teléfono debe tener 10 dígitos.";
+
+                    return;
+                }
+
+
+                if (password.length < 6) {
+
+                    message.classList.add("error");
+
+                    message.textContent =
+                        "La contraseña debe tener mínimo 6 caracteres.";
+
+                    return;
+                }
+
+
+                if (password !== confirmPassword) {
+
+                    message.classList.add("error");
+
+                    message.textContent =
+                        "Las contraseñas no coinciden.";
+
+                    return;
+                }
+
+
+                registerButton.disabled = true;
+
+                registerButton.textContent =
+                    "CREANDO CUENTA...";
+
+
+                const { data, error } =
+                    await clienteSupabase.auth.signUp({
+
+                        email: correo,
+
+                        password: password,
+
+                        options: {
+
+                            data: {
+                                nombre: nombre,
+                                apellido: apellido,
+                                telefono: telefonoValor
+                            }
+
+                        }
+
+                    });
+
+
+                if (error) {
+
+                    console.error(error);
+
+                    message.classList.add("error");
+
+                    message.textContent =
+                        error.message;
+
+                    registerButton.disabled =
+                        false;
+
+                    registerButton.textContent =
+                        "CREAR CUENTA";
+
+                    return;
+                }
+
+
+                message.classList.add("success");
+
+
+                if (data.session) {
+
+                    message.textContent =
+                        "Cuenta creada correctamente.";
+
+                } else {
+
+                    message.textContent =
+                        "Cuenta creada. Revisa tu correo para confirmar tu cuenta.";
+
+                }
+
+
+                console.log(
+                    "Usuario creado:",
+                    data
+                );
+
+
+                form.reset();
+
+
+                registerButton.disabled =
+                    false;
+
+                registerButton.textContent =
+                    "CREAR CUENTA";
+
+            }
+        );
+
+    </script>
+
+</body>
+</html>

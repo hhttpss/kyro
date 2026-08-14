@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Producto | KYRO</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f5;
+            color: #111;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .topbar {
+            height: 78px;
+            background: #050505;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+            padding: 0 30px;
+        }
+
+        .back {
+            position: absolute;
+            left: 30px;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .product-page {
+            min-height: calc(100vh - 78px);
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .image-area {
+            background: #e9e9e7;
+
+            min-height: calc(100vh - 78px);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .image-area img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .no-image {
+            font-size: 12px;
+            color: #888;
+            letter-spacing: 1px;
+        }
+
+        .info-area {
+            padding: 80px 70px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .category {
+            font-size: 10px;
+            color: #777;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+
+            margin-bottom: 15px;
+        }
+
+        .name {
+            font-size: 44px;
+            font-weight: 500;
+            letter-spacing: -2px;
+
+            margin-bottom: 18px;
+        }
+
+        .price {
+            font-size: 22px;
+            font-weight: 600;
+
+            margin-bottom: 30px;
+        }
+
+        .description {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.7;
+
+            margin-bottom: 30px;
+
+            max-width: 500px;
+        }
+
+        .stock {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            margin-bottom: 30px;
+        }
+
+        .stock.available {
+            color: #166534;
+        }
+
+        .stock.sold-out {
+            color: #b91c1c;
+        }
+
+        .quantity-box {
+            margin-bottom: 25px;
+        }
+
+        .quantity-box label {
+            display: block;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            margin-bottom: 10px;
+        }
+
+        .quantity-box input {
+            width: 90px;
+            height: 45px;
+
+            border: 1px solid #bbb;
+            background: white;
+
+            padding: 0 12px;
+
+            font-size: 14px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+
+            gap: 10px;
+
+            max-width: 450px;
+        }
+
+        .btn {
+            width: 100%;
+            height: 54px;
+
+            border: 1px solid #111;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .cart-btn {
+            background: #111;
+            color: white;
+        }
+
+        .cart-btn:hover {
+            background: #333;
+        }
+
+        .favorite-btn {
+            background: transparent;
+            color: #111;
+        }
+
+        .favorite-btn:hover {
+            background: #111;
+            color: white;
+        }
+
+        .favorite-btn.active {
+            background: #111;
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+
+        .message {
+            min-height: 18px;
+            margin-top: 15px;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+        }
+
+        .message.success {
+            color: #166534;
+        }
+
+        .message.error {
+            color: #b91c1c;
+        }
+
+        .loading,
+        .error {
+            padding: 80px 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+
+            .topbar {
+                height: 65px;
+            }
+
+            .back {
+                left: 18px;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+
+            .product-page {
+                grid-template-columns: 1fr;
+            }
+
+            .image-area {
+                min-height: 60vh;
+            }
+
+            .info-area {
+                padding: 45px 22px 60px;
+            }
+
+            .name {
+                font-size: 34px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a href="catalogo.html" class="back">
+            ← VOLVER
+        </a>
+
+        <a href="index.html" class="logo">
+            KYRO
+        </a>
+
+    </header>
+
+
+    <main id="contenido">
+
+        <div class="loading">
+            Cargando producto...
+        </div>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://nhdjeagtkziidkiewttf.supabase.co";
+
+        const SUPABASE_KEY =
+            "sb_publishable_65y75qbjj3WJxlSEG4d6Nw_8ipgOePE";
+
+
+        const clienteSupabase =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        const contenido =
+            document.getElementById("contenido");
+
+
+        const parametros =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const idProducto =
+            parametros.get("id");
+
+
+        async function cargarProducto() {
+
+            if (!idProducto) {
+
+                contenido.innerHTML = `
+                    <div class="error">
+                        Producto no encontrado.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            const { data, error } =
+                await clienteSupabase
+                    .from("produtos")
+                    .select("*")
+                    .eq("id", idProducto)
+                    .eq("activo", true)
+                    .single();
+
+
+            if (error || !data) {
+
+                console.error(error);
+
+                contenido.innerHTML = `
+                    <div class="error">
+                        No se pudo cargar el producto.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            mostrarProducto(data);
+
+        }
+
+
+        function mostrarProducto(producto) {
+
+            const precio =
+                Number(producto.precio).toFixed(2);
+
+
+            const stockDisponible =
+                Number(producto.stock) > 0;
+
+
+            let imagen = `
+                <span class="no-image">
+                    SIN IMAGEN
+                </span>
+            `;
+
+
+            if (producto.imagen) {
+
+                imagen = `
+                    <img
+                        src="${producto.imagen}"
+                        alt="${producto.nombre}"
+                    >
+                `;
+
+            }
+
+
+            contenido.innerHTML = `
+
+                <section class="product-page">
+
+                    <div class="image-area">
+                        ${imagen}
+                    </div>
+
+
+                    <div class="info-area">
+
+                        <p class="category">
+                            ${producto.categoria || "Producto"}
+                        </p>
+
+                        <h1 class="name">
+                            ${producto.nombre}
+                        </h1>
+
+                        <div class="price">
+                            $${precio}
+                        </div>
+
+                        <p class="description">
+                            ${producto.descripcion || ""}
+                        </p>
+
+
+                        <p class="stock ${
+                            stockDisponible
+                                ? "available"
+                                : "sold-out"
+                        }">
+
+                            ${
+                                stockDisponible
+                                    ? `EN STOCK (${producto.stock})`
+                                    : "AGOTADO"
+                            }
+
+                        </p>
+
+
+                        <div class="quantity-box">
+
+                            <label for="cantidad">
+                                CANTIDAD
+                            </label>
+
+                            <input
+                                type="number"
+                                id="cantidad"
+                                value="1"
+                                min="1"
+                                max="${producto.stock}"
+                                ${
+                                    stockDisponible
+                                        ? ""
+                                        : "disabled"
+                                }
+                            >
+
+                        </div>
+
+
+                        <div class="buttons">
+
+                            <button
+                                class="btn cart-btn"
+                                id="addCart"
+                                ${
+                                    stockDisponible
+                                        ? ""
+                                        : "disabled"
+                                }
+                            >
+                                AGREGAR AL CARRITO
+                            </button>
+
+
+                            <button
+                                class="btn favorite-btn"
+                                id="addFavorite"
+                            >
+                                ♡ AGREGAR A FAVORITOS
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            class="message"
+                            id="message"
+                        ></div>
+
+                    </div>
+
+                </section>
+
+            `;
+
+
+            const botonCarrito =
+                document.getElementById("addCart");
+
+            const botonFavorito =
+                document.getElementById("addFavorite");
+
+            const mensaje =
+                document.getElementById("message");
+
+
+            // =================================
+            // CARRITO
+            // =================================
+
+            if (botonCarrito) {
+
+                botonCarrito.addEventListener(
+                    "click",
+                    function () {
+
+                        const cantidadInput =
+                            document.getElementById("cantidad");
+
+
+                        const cantidad =
+                            Number(
+                                cantidadInput.value
+                            );
+
+
+                        mensaje.className =
+                            "message";
+
+                        mensaje.textContent =
+                            "";
+
+
+                        if (
+                            cantidad < 1 ||
+                            cantidad >
+                            Number(producto.stock)
+                        ) {
+
+                            mensaje.classList.add(
+                                "error"
+                            );
+
+                            mensaje.textContent =
+                                "Cantidad no válida.";
+
+                            return;
+                        }
+
+
+                        let carrito =
+                            JSON.parse(
+                                localStorage.getItem(
+                                    "carritoKYRO"
+                                )
+                            ) || [];
+
+
+                        const existente =
+                            carrito.find(
+                                item =>
+                                    Number(item.id) ===
+                                    Number(producto.id)
+                            );
+
+
+                        if (existente) {
+
+                            const nuevaCantidad =
+                                Number(
+                                    existente.cantidad
+                                ) +
+                                cantidad;
+
+
+                            if (
+                                nuevaCantidad >
+                                Number(producto.stock)
+                            ) {
+
+                                mensaje.classList.add(
+                                    "error"
+                                );
+
+                                mensaje.textContent =
+                                    "No hay suficiente stock disponible.";
+
+                                return;
+                            }
+
+
+                            existente.cantidad =
+                                nuevaCantidad;
+
+                        } else {
+
+                            carrito.push({
+
+                                id:
+                                    producto.id,
+
+                                nombre:
+                                    producto.nombre,
+
+                                categoria:
+                                    producto.categoria,
+
+                                precio:
+                                    Number(
+                                        producto.precio
+                                    ),
+
+                                imagen:
+                                    producto.imagen,
+
+                                stock:
+                                    Number(
+                                        producto.stock
+                                    ),
+
+                                cantidad:
+                                    cantidad
+
+                            });
+
+                        }
+
+
+                        localStorage.setItem(
+                            "carritoKYRO",
+                            JSON.stringify(
+                                carrito
+                            )
+                        );
+
+
+                        mensaje.classList.add(
+                            "success"
+                        );
+
+                        mensaje.textContent =
+                            "Producto agregado al carrito.";
+
+                    }
+                );
+
+            }
+
+
+            // =================================
+            // FAVORITOS
+            // =================================
+
+            function obtenerFavoritos() {
+
+                return (
+                    JSON.parse(
+                        localStorage.getItem(
+                            "favoritosKYRO"
+                        )
+                    ) || []
+                );
+
+            }
+
+
+            function guardarFavoritos(
+                favoritos
+            ) {
+
+                localStorage.setItem(
+                    "favoritosKYRO",
+                    JSON.stringify(
+                        favoritos
+                    )
+                );
+
+            }
+
+
+            function estaEnFavoritos() {
+
+                const favoritos =
+                    obtenerFavoritos();
+
+
+                return favoritos.some(
+                    item =>
+                        Number(item.id) ===
+                        Number(producto.id)
+                );
+
+            }
+
+
+            function actualizarBotonFavorito() {
+
+                if (estaEnFavoritos()) {
+
+                    botonFavorito.textContent =
+                        "♥ EN FAVORITOS";
+
+                    botonFavorito.classList.add(
+                        "active"
+                    );
+
+                } else {
+
+                    botonFavorito.textContent =
+                        "♡ AGREGAR A FAVORITOS";
+
+                    botonFavorito.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+
+
+            botonFavorito.addEventListener(
+                "click",
+                function () {
+
+                    let favoritos =
+                        obtenerFavoritos();
+
+
+                    const indice =
+                        favoritos.findIndex(
+                            item =>
+                                Number(item.id) ===
+                                Number(producto.id)
+                        );
+
+
+                    mensaje.className =
+                        "message";
+
+                    mensaje.textContent =
+                        "";
+
+
+                    if (indice !== -1) {
+
+                        favoritos.splice(
+                            indice,
+                            1
+                        );
+
+
+                        guardarFavoritos(
+                            favoritos
+                        );
+
+
+                        mensaje.textContent =
+                            "Producto eliminado de favoritos.";
+
+                    } else {
+
+                        favoritos.push({
+
+                            id:
+                                producto.id,
+
+                            nombre:
+                                producto.nombre,
+
+                            categoria:
+                                producto.categoria,
+
+                            descripcion:
+                                producto.descripcion,
+
+                            precio:
+                                Number(
+                                    producto.precio
+                                ),
+
+                            imagen:
+                                producto.imagen,
+
+                            stock:
+                                Number(
+                                    producto.stock
+                                )
+
+                        });
+
+
+                        guardarFavoritos(
+                            favoritos
+                        );
+
+
+                        mensaje.classList.add(
+                            "success"
+                        );
+
+                        mensaje.textContent =
+                            "Producto agregado a favoritos.";
+
+                    }
+
+
+                    actualizarBotonFavorito();
+
+                }
+            );
+
+
+            // Al abrir la página,
+            // revisar si ya estaba guardado.
+
+            actualizarBotonFavorito();
+
+        }
+
+
+        cargarProducto();
+
+    </script>
+
+</body>
+</html>

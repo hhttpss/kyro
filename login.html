@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | KYRO</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #050505;
+            color: white;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .topbar {
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid #222;
+            position: relative;
+        }
+
+        .back {
+            position: absolute;
+            left: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .login-page {
+            min-height: calc(100vh - 78px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .login-box {
+            width: 100%;
+            max-width: 430px;
+        }
+
+        .login-header {
+            margin-bottom: 40px;
+        }
+
+        .login-header p {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #888;
+            margin-bottom: 14px;
+        }
+
+        .login-header h1 {
+            font-size: 36px;
+            font-weight: 500;
+            letter-spacing: -1.5px;
+            margin-bottom: 14px;
+        }
+
+        .login-header span {
+            font-size: 13px;
+            color: #aaa;
+            line-height: 1.5;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 48px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #555;
+            color: white;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            border-bottom-color: white;
+        }
+
+        .login-button {
+            width: 100%;
+            height: 52px;
+            margin-top: 15px;
+            border: 1px solid white;
+            background: white;
+            color: black;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-button:hover {
+            background: transparent;
+            color: white;
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            margin-bottom: 20px;
+            padding: 12px;
+            font-size: 12px;
+            border: 1px solid #333;
+        }
+
+        .message.error {
+            display: block;
+            color: #ffb4b4;
+            border-color: #6b2525;
+        }
+
+        .message.success {
+            display: block;
+            color: #b9ffc7;
+            border-color: #236b35;
+        }
+
+        .register-link {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .register-link a {
+            color: white;
+            border-bottom: 1px solid white;
+        }
+
+        .forgot-password {
+            margin-top: 18px;
+            text-align: center;
+        }
+
+        .forgot-password a {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        .forgot-password a:hover {
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+
+            .topbar {
+                height: 65px;
+            }
+
+            .back {
+                left: 18px;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a href="index.html" class="back">
+            ← VOLVER
+        </a>
+
+        <a href="index.html" class="logo">
+            KYRO
+        </a>
+
+    </header>
+
+
+    <main class="login-page">
+
+        <section class="login-box">
+
+            <div class="login-header">
+
+                <p>
+                    KYRO ACCOUNT
+                </p>
+
+                <h1>
+                    INICIAR SESIÓN
+                </h1>
+
+                <span>
+                    Ingresa con el correo y contraseña
+                    de tu cuenta KYRO.
+                </span>
+
+            </div>
+
+
+            <div
+                class="message"
+                id="message"
+            ></div>
+
+
+            <form id="loginForm">
+
+                <div class="form-group">
+
+                    <label for="correo">
+                        CORREO ELECTRÓNICO
+                    </label>
+
+                    <input
+                        type="email"
+                        id="correo"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        CONTRASEÑA
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="login-button"
+                    id="loginButton"
+                >
+                    INICIAR SESIÓN
+                </button>
+
+
+                <div class="forgot-password">
+
+                    <a href="recuperar.html">
+                        ¿Olvidaste tu contraseña?
+                    </a>
+
+                </div>
+
+            </form>
+
+
+            <div class="register-link">
+
+                ¿No tienes una cuenta?
+
+                <a href="registro.html">
+                    Registrarse
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+
+        const SUPABASE_URL =
+            "https://nhdjeagtkziidkiewttf.supabase.co";
+
+
+        const SUPABASE_KEY =
+            "sb_publishable_65y75qbjj3WJxlSEG4d6Nw_8ipgOePE";
+
+
+        const clienteSupabase =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        const form =
+            document.getElementById(
+                "loginForm"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const loginButton =
+            document.getElementById(
+                "loginButton"
+            );
+
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                const correo =
+                    document
+                        .getElementById(
+                            "correo"
+                        )
+                        .value
+                        .trim();
+
+
+                const password =
+                    document
+                        .getElementById(
+                            "password"
+                        )
+                        .value;
+
+
+                message.className =
+                    "message";
+
+
+                message.textContent =
+                    "";
+
+
+                loginButton.disabled =
+                    true;
+
+
+                loginButton.textContent =
+                    "INICIANDO...";
+
+
+                // =========================
+                // INICIAR SESIÓN
+                // =========================
+
+                const {
+                    data,
+                    error
+                } =
+                    await clienteSupabase
+                        .auth
+                        .signInWithPassword({
+
+                            email:
+                                correo,
+
+                            password:
+                                password
+
+                        });
+
+
+                if (error) {
+
+                    console.error(
+                        "Error login:",
+                        error
+                    );
+
+
+                    message.classList.add(
+                        "error"
+                    );
+
+
+                    message.textContent =
+                        "Correo o contraseña incorrectos.";
+
+
+                    loginButton.disabled =
+                        false;
+
+
+                    loginButton.textContent =
+                        "INICIAR SESIÓN";
+
+
+                    return;
+
+                }
+
+
+                const usuario =
+                    data.user;
+
+
+                if (!usuario) {
+
+                    message.classList.add(
+                        "error"
+                    );
+
+
+                    message.textContent =
+                        "No se pudo obtener el usuario.";
+
+
+                    loginButton.disabled =
+                        false;
+
+
+                    loginButton.textContent =
+                        "INICIAR SESIÓN";
+
+
+                    return;
+
+                }
+
+
+                // =========================
+                // CONSULTAR ROL
+                // =========================
+
+                const {
+                    data: perfil,
+                    error: errorPerfil
+                } =
+                    await clienteSupabase
+                        .from("perfiles")
+                        .select("rol")
+                        .eq(
+                            "id",
+                            usuario.id
+                        )
+                        .maybeSingle();
+
+
+                console.log(
+                    "Usuario:",
+                    usuario
+                );
+
+
+                console.log(
+                    "Perfil:",
+                    perfil
+                );
+
+
+                console.log(
+                    "Error perfil:",
+                    errorPerfil
+                );
+
+
+                if (errorPerfil) {
+
+                    message.classList.add(
+                        "error"
+                    );
+
+
+                    message.textContent =
+                        "No se pudo comprobar el tipo de cuenta.";
+
+
+                    loginButton.disabled =
+                        false;
+
+
+                    loginButton.textContent =
+                        "INICIAR SESIÓN";
+
+
+                    return;
+
+                }
+
+
+                // =========================
+                // ADMIN
+                // =========================
+
+                if (
+                    perfil &&
+                    perfil.rol === "admin"
+                ) {
+
+                    message.classList.add(
+                        "success"
+                    );
+
+
+                    message.textContent =
+                        "Bienvenido, administrador.";
+
+
+                    setTimeout(
+                        function () {
+
+                            window.location.href =
+                                "admin.html";
+
+                        },
+                        500
+                    );
+
+
+                    return;
+
+                }
+
+
+                // =========================
+                // CLIENTE
+                // =========================
+
+                message.classList.add(
+                    "success"
+                );
+
+
+                message.textContent =
+                    "Sesión iniciada correctamente.";
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            "index.html";
+
+                    },
+                    500
+                );
+
+            }
+        );
+
+    </script>
+
+</body>
+</html

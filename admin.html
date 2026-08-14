@@ -1,0 +1,2316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin | KYRO</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f4f2;
+            color: #111;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        /* =========================
+                NAVBAR
+        ========================== */
+
+        .topbar {
+            height: 75px;
+            background: #050505;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+
+            padding: 0 25px;
+        }
+
+        .back {
+            position: absolute;
+            left: 25px;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .logout {
+            position: absolute;
+            right: 25px;
+
+            border: 1px solid #555;
+            background: transparent;
+            color: white;
+
+            padding: 10px 14px;
+
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+        }
+
+        .logout:hover {
+            background: white;
+            color: black;
+        }
+
+
+        /* =========================
+                CARGANDO
+        ========================== */
+
+        .loading-screen {
+            min-height: calc(100vh - 75px);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+                PÁGINA
+        ========================== */
+
+        .page {
+            width: 100%;
+            max-width: 1100px;
+
+            margin: auto;
+
+            padding: 60px 25px 100px;
+
+            display: none;
+        }
+
+        .header {
+            margin-bottom: 40px;
+        }
+
+        .header p {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #777;
+
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 500;
+        }
+
+        .admin-user {
+            margin-top: 12px;
+
+            color: #777;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+                FORMULARIO
+        ========================== */
+
+        .form-box {
+            background: white;
+
+            padding: 35px;
+
+            margin-bottom: 70px;
+        }
+
+        .group {
+            margin-bottom: 22px;
+        }
+
+        label {
+            display: block;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            margin-bottom: 8px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+
+            border: 1px solid #bbb;
+
+            background: white;
+
+            padding: 13px;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #111;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .row {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+        }
+
+
+        /* =========================
+                CHECKBOX
+        ========================== */
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+        }
+
+        .checkbox input {
+            width: auto;
+        }
+
+        .checkbox label {
+            margin: 0;
+        }
+
+
+        /* =========================
+                IMAGEN
+        ========================== */
+
+        .preview {
+            margin-top: 15px;
+        }
+
+        .preview img {
+            width: 180px;
+            height: 220px;
+
+            object-fit: cover;
+
+            display: none;
+
+            background: #eee;
+        }
+
+
+        /* =========================
+                BOTONES FORMULARIO
+        ========================== */
+
+        .form-buttons {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .save-button {
+            flex: 1;
+
+            height: 54px;
+
+            border: 1px solid #111;
+
+            background: #111;
+            color: white;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .save-button:hover {
+            background: #333;
+        }
+
+        .save-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .cancel-button {
+            height: 54px;
+
+            padding: 0 25px;
+
+            border: 1px solid #111;
+
+            background: white;
+            color: #111;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            display: none;
+        }
+
+        .cancel-button:hover {
+            background: #eee;
+        }
+
+
+        /* =========================
+                MENSAJES
+        ========================== */
+
+        .message {
+            min-height: 18px;
+
+            margin-top: 18px;
+
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .message.success {
+            color: #166534;
+        }
+
+        .message.error {
+            color: #b91c1c;
+        }
+
+
+        /* =========================
+                PRODUCTOS
+        ========================== */
+
+        .products-section {
+            margin-top: 30px;
+        }
+
+        .products-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 30px;
+
+            border-bottom: 1px solid #ccc;
+
+            padding-bottom: 20px;
+        }
+
+        .products-header p {
+            font-size: 10px;
+            color: #777;
+            letter-spacing: 2px;
+
+            margin-bottom: 7px;
+        }
+
+        .products-header h2 {
+            font-size: 28px;
+            font-weight: 500;
+        }
+
+        .products-count {
+            font-size: 11px;
+            color: #777;
+        }
+
+
+        /* =========================
+                PRODUCTO ADMIN
+        ========================== */
+
+        .products-list {
+            display: flex;
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+        .admin-product {
+            background: white;
+
+            display: grid;
+
+            grid-template-columns:
+                110px
+                minmax(180px, 1fr)
+                120px
+                120px
+                190px;
+
+            align-items: center;
+
+            gap: 20px;
+
+            padding: 15px;
+        }
+
+        .product-image {
+            width: 110px;
+            height: 130px;
+
+            background: #eee;
+
+            object-fit: cover;
+        }
+
+        .no-image {
+            width: 110px;
+            height: 130px;
+
+            background: #e9e9e9;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            font-size: 9px;
+            letter-spacing: 1px;
+            color: #777;
+        }
+
+        .product-info .category {
+            font-size: 9px;
+            color: #888;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+
+            margin-bottom: 7px;
+        }
+
+        .product-info h3 {
+            font-size: 17px;
+            font-weight: 500;
+
+            margin-bottom: 7px;
+        }
+
+        .product-info .description {
+            font-size: 11px;
+            color: #777;
+
+            line-height: 1.5;
+
+            max-width: 400px;
+        }
+
+        .product-price {
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .product-stock {
+            font-size: 11px;
+            color: #555;
+        }
+
+        .status {
+            display: inline-block;
+
+            margin-top: 6px;
+
+            padding: 5px 8px;
+
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .status.active {
+            background: #e7f8eb;
+            color: #166534;
+        }
+
+        .status.inactive {
+            background: #eee;
+            color: #666;
+        }
+
+
+        /* =========================
+                ACCIONES
+        ========================== */
+
+        .product-actions {
+            display: flex;
+
+            gap: 7px;
+        }
+
+        .edit-button,
+        .delete-button {
+            flex: 1;
+
+            height: 40px;
+
+            cursor: pointer;
+
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .edit-button {
+            background: #111;
+            color: white;
+
+            border: 1px solid #111;
+        }
+
+        .edit-button:hover {
+            background: #333;
+        }
+
+        .delete-button {
+            background: white;
+            color: #111;
+
+            border: 1px solid #aaa;
+        }
+
+        .delete-button:hover {
+            border-color: #b91c1c;
+            color: #b91c1c;
+        }
+
+
+        /* =========================
+                VACÍO / CARGA
+        ========================== */
+
+        .products-message {
+            background: white;
+
+            padding: 45px 20px;
+
+            text-align: center;
+
+            font-size: 11px;
+            color: #777;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* =========================
+                RESPONSIVE
+        ========================== */
+
+        @media (max-width: 850px) {
+
+            .admin-product {
+                grid-template-columns:
+                    90px
+                    1fr;
+            }
+
+            .product-image,
+            .no-image {
+                width: 90px;
+                height: 110px;
+            }
+
+            .product-price,
+            .product-stock,
+            .product-actions {
+                grid-column: 2;
+            }
+
+            .product-actions {
+                max-width: 300px;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .row {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                padding: 40px 15px 70px;
+            }
+
+            .form-box {
+                padding: 22px;
+            }
+
+            .logout {
+                right: 8px;
+
+                padding: 7px 8px;
+
+                font-size: 8px;
+            }
+
+            .back {
+                left: 8px;
+
+                font-size: 9px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .form-buttons {
+                flex-direction: column;
+            }
+
+            .cancel-button {
+                width: 100%;
+            }
+
+            .admin-product {
+                grid-template-columns: 80px 1fr;
+
+                gap: 12px;
+            }
+
+            .product-image,
+            .no-image {
+                width: 80px;
+                height: 100px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+
+    <!-- =========================
+             NAVBAR
+    ========================== -->
+
+    <header class="topbar">
+
+        <a
+            href="index.html"
+            class="back"
+        >
+            ← TIENDA
+        </a>
+
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+            KYRO
+        </a>
+
+
+        <button
+            type="button"
+            class="logout"
+            id="logoutButton"
+        >
+            CERRAR SESIÓN
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+             CARGANDO
+    ========================== -->
+
+    <div
+        class="loading-screen"
+        id="loadingScreen"
+    >
+        VERIFICANDO ADMINISTRADOR...
+    </div>
+
+
+    <!-- =========================
+             PANEL
+    ========================== -->
+
+    <main
+        class="page"
+        id="adminPage"
+    >
+
+
+        <!-- =========================
+                ENCABEZADO
+        ========================== -->
+
+        <div class="header">
+
+            <p>
+                KYRO ADMIN
+            </p>
+
+            <h1 id="formTitle">
+                AGREGAR PRODUCTO
+            </h1>
+
+            <div
+                class="admin-user"
+                id="adminUser"
+            ></div>
+
+        </div>
+
+
+        <!-- =========================
+                FORMULARIO
+        ========================== -->
+
+        <div class="form-box">
+
+            <form id="productForm">
+
+
+                <div class="group">
+
+                    <label for="nombre">
+                        NOMBRE
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombre"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="group">
+
+                    <label for="categoria">
+                        CATEGORÍA
+                    </label>
+
+                    <input
+                        type="text"
+                        id="categoria"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="group">
+
+                    <label for="descripcion">
+                        DESCRIPCIÓN
+                    </label>
+
+                    <textarea
+                        id="descripcion"
+                    ></textarea>
+
+                </div>
+
+
+                <div class="row">
+
+                    <div class="group">
+
+                        <label for="precio">
+                            PRECIO
+                        </label>
+
+                        <input
+                            type="number"
+                            id="precio"
+                            min="0"
+                            step="0.01"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="group">
+
+                        <label for="stock">
+                            STOCK
+                        </label>
+
+                        <input
+                            type="number"
+                            id="stock"
+                            min="0"
+                            step="1"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="group">
+
+                    <label for="imagen">
+                        IMAGEN
+                    </label>
+
+                    <input
+                        type="file"
+                        id="imagen"
+                        accept="image/*"
+                    >
+
+                    <div class="preview">
+
+                        <img
+                            id="previewImage"
+                            alt="Vista previa"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="group checkbox">
+
+                    <input
+                        type="checkbox"
+                        id="activo"
+                        checked
+                    >
+
+                    <label for="activo">
+                        PRODUCTO ACTIVO
+                    </label>
+
+                </div>
+
+
+                <div class="form-buttons">
+
+                    <button
+                        type="submit"
+                        class="save-button"
+                        id="saveButton"
+                    >
+                        GUARDAR PRODUCTO
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        id="cancelButton"
+                    >
+                        CANCELAR EDICIÓN
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="message"
+                    id="message"
+                ></div>
+
+
+            </form>
+
+        </div>
+
+
+        <!-- =========================
+                PRODUCTOS
+        ========================== -->
+
+        <section class="products-section">
+
+            <div class="products-header">
+
+                <div>
+
+                    <p>
+                        KYRO INVENTORY
+                    </p>
+
+                    <h2>
+                        PRODUCTOS ACTUALES
+                    </h2>
+
+                </div>
+
+
+                <span
+                    class="products-count"
+                    id="productsCount"
+                >
+                    0 PRODUCTOS
+                </span>
+
+            </div>
+
+
+            <div
+                class="products-list"
+                id="productsList"
+            >
+
+                <div class="products-message">
+                    CARGANDO PRODUCTOS...
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+             SUPABASE
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <script>
+
+        // =================================
+        // SUPABASE
+        // =================================
+
+        const SUPABASE_URL =
+            "https://nhdjeagtkziidkiewttf.supabase.co";
+
+
+        const SUPABASE_KEY =
+            "sb_publishable_65y75qbjj3WJxlSEG4d6Nw_8ipgOePE";
+
+
+        const clienteSupabase =
+            supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_KEY
+            );
+
+
+        // =================================
+        // ELEMENTOS
+        // =================================
+
+        const loadingScreen =
+            document.getElementById(
+                "loadingScreen"
+            );
+
+
+        const adminPage =
+            document.getElementById(
+                "adminPage"
+            );
+
+
+        const adminUser =
+            document.getElementById(
+                "adminUser"
+            );
+
+
+        const productForm =
+            document.getElementById(
+                "productForm"
+            );
+
+
+        const saveButton =
+            document.getElementById(
+                "saveButton"
+            );
+
+
+        const cancelButton =
+            document.getElementById(
+                "cancelButton"
+            );
+
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+
+        const imagenInput =
+            document.getElementById(
+                "imagen"
+            );
+
+
+        const previewImage =
+            document.getElementById(
+                "previewImage"
+            );
+
+
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+
+        const productsList =
+            document.getElementById(
+                "productsList"
+            );
+
+
+        const productsCount =
+            document.getElementById(
+                "productsCount"
+            );
+
+
+        const formTitle =
+            document.getElementById(
+                "formTitle"
+            );
+
+
+        // =================================
+        // VARIABLES
+        // =================================
+
+        let adminAutorizado =
+            false;
+
+
+        let productosActuales =
+            [];
+
+
+        let productoEditandoId =
+            null;
+
+
+        let imagenActual =
+            null;
+
+
+        // =================================
+        // VERIFICAR ADMIN
+        // =================================
+
+        async function verificarAdmin() {
+
+            try {
+
+                const {
+                    data: sessionData,
+                    error: sessionError
+                } =
+                    await clienteSupabase
+                        .auth
+                        .getSession();
+
+
+                if (
+                    sessionError ||
+                    !sessionData.session
+                ) {
+
+                    window.location.href =
+                        "login.html";
+
+                    return false;
+
+                }
+
+
+                const usuario =
+                    sessionData.session.user;
+
+
+                const {
+                    data: perfil,
+                    error: errorPerfil
+                } =
+                    await clienteSupabase
+                        .from("perfiles")
+                        .select("rol")
+                        .eq(
+                            "id",
+                            usuario.id
+                        )
+                        .maybeSingle();
+
+
+                if (
+                    errorPerfil ||
+                    !perfil
+                ) {
+
+                    console.error(
+                        "Error perfil:",
+                        errorPerfil
+                    );
+
+
+                    alert(
+                        "No se pudo comprobar tu cuenta."
+                    );
+
+
+                    return false;
+
+                }
+
+
+                if (
+                    perfil.rol !== "admin"
+                ) {
+
+                    window.location.href =
+                        "index.html";
+
+                    return false;
+
+                }
+
+
+                adminAutorizado =
+                    true;
+
+
+                adminUser.textContent =
+                    "Sesión: " +
+                    usuario.email;
+
+
+                loadingScreen.style.display =
+                    "none";
+
+
+                adminPage.style.display =
+                    "block";
+
+
+                return true;
+
+
+            } catch (error) {
+
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    "Error verificando administrador."
+                );
+
+
+                return false;
+
+            }
+
+        }
+
+
+        // =================================
+        // CERRAR SESIÓN
+        // =================================
+
+        logoutButton.addEventListener(
+            "click",
+            async function () {
+
+                await clienteSupabase
+                    .auth
+                    .signOut();
+
+
+                window.location.href =
+                    "login.html";
+
+            }
+        );
+
+
+        // =================================
+        // VISTA PREVIA
+        // =================================
+
+        imagenInput.addEventListener(
+            "change",
+            function () {
+
+                const archivo =
+                    imagenInput.files[0];
+
+
+                if (!archivo) {
+
+                    if (imagenActual) {
+
+                        previewImage.src =
+                            imagenActual;
+
+
+                        previewImage.style.display =
+                            "block";
+
+                    } else {
+
+                        previewImage.src =
+                            "";
+
+
+                        previewImage.style.display =
+                            "none";
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                const urlTemporal =
+                    URL.createObjectURL(
+                        archivo
+                    );
+
+
+                previewImage.src =
+                    urlTemporal;
+
+
+                previewImage.style.display =
+                    "block";
+
+            }
+        );
+
+
+        // =================================
+        // SUBIR IMAGEN
+        // =================================
+
+        async function subirImagen(
+            archivo
+        ) {
+
+            if (!archivo) {
+
+                return null;
+
+            }
+
+
+            const extension =
+                archivo.name
+                    .split(".")
+                    .pop()
+                    .toLowerCase();
+
+
+            const nombreArchivo =
+                Date.now() +
+                "-" +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 10) +
+                "." +
+                extension;
+
+
+            const {
+                data,
+                error
+            } =
+                await clienteSupabase
+                    .storage
+                    .from("produtos")
+                    .upload(
+                        nombreArchivo,
+                        archivo,
+                        {
+                            cacheControl:
+                                "3600",
+
+                            upsert:
+                                false
+                        }
+                    );
+
+
+            if (error) {
+
+                throw new Error(
+                    "No se pudo subir la imagen: " +
+                    error.message
+                );
+
+            }
+
+
+            const {
+                data: publicData
+            } =
+                clienteSupabase
+                    .storage
+                    .from("produtos")
+                    .getPublicUrl(
+                        data.path
+                    );
+
+
+            return publicData.publicUrl;
+
+        }
+
+
+        // =================================
+        // ESCAPAR TEXTO
+        // =================================
+
+        function escaparTexto(
+            texto
+        ) {
+
+            if (
+                texto === null ||
+                texto === undefined
+            ) {
+
+                return "";
+
+            }
+
+
+            return String(texto)
+                .replaceAll(
+                    "&",
+                    "&amp;"
+                )
+                .replaceAll(
+                    "<",
+                    "&lt;"
+                )
+                .replaceAll(
+                    ">",
+                    "&gt;"
+                )
+                .replaceAll(
+                    '"',
+                    "&quot;"
+                )
+                .replaceAll(
+                    "'",
+                    "&#039;"
+                );
+
+        }
+
+
+        // =================================
+        // CARGAR PRODUCTOS
+        // =================================
+
+        async function cargarProductos() {
+
+            productsList.innerHTML =
+                `
+                    <div class="products-message">
+                        CARGANDO PRODUCTOS...
+                    </div>
+                `;
+
+
+            const {
+                data,
+                error
+            } =
+                await clienteSupabase
+                    .from("produtos")
+                    .select("*")
+                    .order(
+                        "created_at",
+                        {
+                            ascending:
+                                false
+                        }
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+
+                productsList.innerHTML =
+                    `
+                        <div class="products-message">
+                            ERROR AL CARGAR PRODUCTOS
+                        </div>
+                    `;
+
+
+                return;
+
+            }
+
+
+            productosActuales =
+                data || [];
+
+
+            productsCount.textContent =
+                productosActuales.length +
+                (
+                    productosActuales.length === 1
+                        ? " PRODUCTO"
+                        : " PRODUCTOS"
+                );
+
+
+            if (
+                productosActuales.length === 0
+            ) {
+
+                productsList.innerHTML =
+                    `
+                        <div class="products-message">
+                            TODAVÍA NO HAY PRODUCTOS
+                        </div>
+                    `;
+
+
+                return;
+
+            }
+
+
+            renderizarProductos();
+
+        }
+
+
+        // =================================
+        // MOSTRAR PRODUCTOS
+        // =================================
+
+        function renderizarProductos() {
+
+            productsList.innerHTML =
+                "";
+
+
+            productosActuales.forEach(
+                function (producto) {
+
+                    const contenedor =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    contenedor.className =
+                        "admin-product";
+
+
+                    let imagenHTML =
+                        `
+                            <div class="no-image">
+                                SIN IMAGEN
+                            </div>
+                        `;
+
+
+                    if (producto.imagen) {
+
+                        imagenHTML =
+                            `
+                                <img
+                                    class="product-image"
+                                    src="${escaparTexto(producto.imagen)}"
+                                    alt="${escaparTexto(producto.nombre)}"
+                                >
+                            `;
+
+                    }
+
+
+                    const estadoHTML =
+                        producto.activo
+                            ?
+                            `
+                                <span class="status active">
+                                    ACTIVO
+                                </span>
+                            `
+                            :
+                            `
+                                <span class="status inactive">
+                                    INACTIVO
+                                </span>
+                            `;
+
+
+                    contenedor.innerHTML =
+                        `
+
+                            ${imagenHTML}
+
+
+                            <div class="product-info">
+
+                                <div class="category">
+                                    ${escaparTexto(producto.categoria)}
+                                </div>
+
+                                <h3>
+                                    ${escaparTexto(producto.nombre)}
+                                </h3>
+
+                                <div class="description">
+                                    ${escaparTexto(producto.descripcion || "")}
+                                </div>
+
+                            </div>
+
+
+                            <div class="product-price">
+
+                                $${Number(producto.precio).toFixed(2)}
+
+                            </div>
+
+
+                            <div class="product-stock">
+
+                                STOCK:
+                                ${producto.stock}
+
+                                <br>
+
+                                ${estadoHTML}
+
+                            </div>
+
+
+                            <div class="product-actions">
+
+                                <button
+                                    type="button"
+                                    class="edit-button"
+                                    data-id="${producto.id}"
+                                >
+                                    EDITAR
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="delete-button"
+                                    data-id="${producto.id}"
+                                >
+                                    ELIMINAR
+                                </button>
+
+                            </div>
+
+                        `;
+
+
+                    productsList.appendChild(
+                        contenedor
+                    );
+
+                }
+            );
+
+
+            // BOTONES EDITAR
+
+            document
+                .querySelectorAll(
+                    ".edit-button"
+                )
+                .forEach(
+                    function (boton) {
+
+                        boton.addEventListener(
+                            "click",
+                            function () {
+
+                                const id =
+                                    Number(
+                                        boton.dataset.id
+                                    );
+
+
+                                editarProducto(
+                                    id
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            // BOTONES ELIMINAR
+
+            document
+                .querySelectorAll(
+                    ".delete-button"
+                )
+                .forEach(
+                    function (boton) {
+
+                        boton.addEventListener(
+                            "click",
+                            function () {
+
+                                const id =
+                                    Number(
+                                        boton.dataset.id
+                                    );
+
+
+                                eliminarProducto(
+                                    id
+                                );
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+
+
+        // =================================
+        // EDITAR PRODUCTO
+        // =================================
+
+        function editarProducto(
+            id
+        ) {
+
+            const producto =
+                productosActuales.find(
+                    function (item) {
+
+                        return Number(item.id) ===
+                            Number(id);
+
+                    }
+                );
+
+
+            if (!producto) {
+
+                alert(
+                    "No se encontró el producto."
+                );
+
+
+                return;
+
+            }
+
+
+            productoEditandoId =
+                producto.id;
+
+
+            imagenActual =
+                producto.imagen || null;
+
+
+            document
+                .getElementById(
+                    "nombre"
+                )
+                .value =
+                    producto.nombre || "";
+
+
+            document
+                .getElementById(
+                    "categoria"
+                )
+                .value =
+                    producto.categoria || "";
+
+
+            document
+                .getElementById(
+                    "descripcion"
+                )
+                .value =
+                    producto.descripcion || "";
+
+
+            document
+                .getElementById(
+                    "precio"
+                )
+                .value =
+                    producto.precio;
+
+
+            document
+                .getElementById(
+                    "stock"
+                )
+                .value =
+                    producto.stock;
+
+
+            document
+                .getElementById(
+                    "activo"
+                )
+                .checked =
+                    producto.activo;
+
+
+            imagenInput.value =
+                "";
+
+
+            if (imagenActual) {
+
+                previewImage.src =
+                    imagenActual;
+
+
+                previewImage.style.display =
+                    "block";
+
+            } else {
+
+                previewImage.src =
+                    "";
+
+
+                previewImage.style.display =
+                    "none";
+
+            }
+
+
+            formTitle.textContent =
+                "EDITAR PRODUCTO";
+
+
+            saveButton.textContent =
+                "GUARDAR CAMBIOS";
+
+
+            cancelButton.style.display =
+                "block";
+
+
+            message.className =
+                "message";
+
+
+            message.textContent =
+                "Editando: " +
+                producto.nombre;
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+
+        // =================================
+        // CANCELAR EDICIÓN
+        // =================================
+
+        cancelButton.addEventListener(
+            "click",
+            function () {
+
+                limpiarFormulario();
+
+            }
+        );
+
+
+        // =================================
+        // LIMPIAR FORMULARIO
+        // =================================
+
+        function limpiarFormulario() {
+
+            productoEditandoId =
+                null;
+
+
+            imagenActual =
+                null;
+
+
+            productForm.reset();
+
+
+            document
+                .getElementById(
+                    "activo"
+                )
+                .checked =
+                    true;
+
+
+            imagenInput.value =
+                "";
+
+
+            previewImage.src =
+                "";
+
+
+            previewImage.style.display =
+                "none";
+
+
+            formTitle.textContent =
+                "AGREGAR PRODUCTO";
+
+
+            saveButton.textContent =
+                "GUARDAR PRODUCTO";
+
+
+            cancelButton.style.display =
+                "none";
+
+
+            message.className =
+                "message";
+
+
+            message.textContent =
+                "";
+
+        }
+
+
+        // =================================
+        // GUARDAR / ACTUALIZAR
+        // =================================
+
+        productForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                if (!adminAutorizado) {
+
+                    return;
+
+                }
+
+
+                message.className =
+                    "message";
+
+
+                message.textContent =
+                    "";
+
+
+                saveButton.disabled =
+                    true;
+
+
+                saveButton.textContent =
+                    productoEditandoId
+                        ? "ACTUALIZANDO..."
+                        : "GUARDANDO...";
+
+
+                try {
+
+                    const nombre =
+                        document
+                            .getElementById(
+                                "nombre"
+                            )
+                            .value
+                            .trim();
+
+
+                    const categoria =
+                        document
+                            .getElementById(
+                                "categoria"
+                            )
+                            .value
+                            .trim();
+
+
+                    const descripcion =
+                        document
+                            .getElementById(
+                                "descripcion"
+                            )
+                            .value
+                            .trim();
+
+
+                    const precio =
+                        Number(
+                            document
+                                .getElementById(
+                                    "precio"
+                                )
+                                .value
+                        );
+
+
+                    const stock =
+                        Number(
+                            document
+                                .getElementById(
+                                    "stock"
+                                )
+                                .value
+                        );
+
+
+                    const activo =
+                        document
+                            .getElementById(
+                                "activo"
+                            )
+                            .checked;
+
+
+                    const archivo =
+                        imagenInput.files[0];
+
+
+                    // VALIDACIONES
+
+                    if (
+                        nombre === "" ||
+                        categoria === ""
+                    ) {
+
+                        throw new Error(
+                            "Completa nombre y categoría."
+                        );
+
+                    }
+
+
+                    if (
+                        Number.isNaN(precio) ||
+                        precio < 0
+                    ) {
+
+                        throw new Error(
+                            "El precio no es válido."
+                        );
+
+                    }
+
+
+                    if (
+                        !Number.isInteger(stock) ||
+                        stock < 0
+                    ) {
+
+                        throw new Error(
+                            "El stock no es válido."
+                        );
+
+                    }
+
+
+                    let urlImagen =
+                        imagenActual;
+
+
+                    // NUEVA IMAGEN
+
+                    if (archivo) {
+
+                        urlImagen =
+                            await subirImagen(
+                                archivo
+                            );
+
+                    }
+
+
+                    // =========================
+                    // EDITANDO
+                    // =========================
+
+                    if (productoEditandoId) {
+
+                        const {
+                            error
+                        } =
+                            await clienteSupabase
+                                .from("produtos")
+                                .update({
+
+                                    nombre:
+                                        nombre,
+
+                                    categoria:
+                                        categoria,
+
+                                    descripcion:
+                                        descripcion,
+
+                                    precio:
+                                        precio,
+
+                                    stock:
+                                        stock,
+
+                                    imagen:
+                                        urlImagen,
+
+                                    activo:
+                                        activo
+
+                                })
+                                .eq(
+                                    "id",
+                                    productoEditandoId
+                                );
+
+
+                        if (error) {
+
+                            throw new Error(
+                                "No se pudo actualizar: " +
+                                error.message
+                            );
+
+                        }
+
+
+                        limpiarFormulario();
+
+
+                        await cargarProductos();
+
+
+                        message.classList.add(
+                            "success"
+                        );
+
+
+                        message.textContent =
+                            "Producto actualizado correctamente.";
+
+
+                    }
+
+
+                    // =========================
+                    // NUEVO PRODUCTO
+                    // =========================
+
+                    else {
+
+                        const {
+                            error
+                        } =
+                            await clienteSupabase
+                                .from("produtos")
+                                .insert([
+
+                                    {
+
+                                        nombre:
+                                            nombre,
+
+                                        categoria:
+                                            categoria,
+
+                                        descripcion:
+                                            descripcion,
+
+                                        precio:
+                                            precio,
+
+                                        stock:
+                                            stock,
+
+                                        imagen:
+                                            urlImagen,
+
+                                        activo:
+                                            activo
+
+                                    }
+
+                                ]);
+
+
+                        if (error) {
+
+                            throw new Error(
+                                "No se pudo guardar: " +
+                                error.message
+                            );
+
+                        }
+
+
+                        limpiarFormulario();
+
+
+                        await cargarProductos();
+
+
+                        message.classList.add(
+                            "success"
+                        );
+
+
+                        message.textContent =
+                            "Producto guardado correctamente.";
+
+                    }
+
+
+                } catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+
+                    message.classList.add(
+                        "error"
+                    );
+
+
+                    message.textContent =
+                        error.message;
+
+                }
+
+
+                saveButton.disabled =
+                    false;
+
+
+                saveButton.textContent =
+                    productoEditandoId
+                        ? "GUARDAR CAMBIOS"
+                        : "GUARDAR PRODUCTO";
+
+            }
+        );
+
+
+        // =================================
+        // ELIMINAR PRODUCTO
+        // =================================
+
+        async function eliminarProducto(
+            id
+        ) {
+
+            const producto =
+                productosActuales.find(
+                    function (item) {
+
+                        return Number(item.id) ===
+                            Number(id);
+
+                    }
+                );
+
+
+            if (!producto) {
+
+                return;
+
+            }
+
+
+            const confirmar =
+                confirm(
+                    '¿Seguro que quieres eliminar "' +
+                    producto.nombre +
+                    '"?\n\nEsta acción no se puede deshacer.'
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            const {
+                error
+            } =
+                await clienteSupabase
+                    .from("produtos")
+                    .delete()
+                    .eq(
+                        "id",
+                        id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    error
+                );
+
+
+                alert(
+                    "No se pudo eliminar el producto:\n" +
+                    error.message
+                );
+
+
+                return;
+
+            }
+
+
+            if (
+                Number(productoEditandoId) ===
+                Number(id)
+            ) {
+
+                limpiarFormulario();
+
+            }
+
+
+            await cargarProductos();
+
+
+            message.className =
+                "message success";
+
+
+            message.textContent =
+                "Producto eliminado correctamente.";
+
+        }
+
+
+        // =================================
+        // INICIAR
+        // =================================
+
+        async function iniciarAdmin() {
+
+            const esAdmin =
+                await verificarAdmin();
+
+
+            if (!esAdmin) {
+
+                return;
+
+            }
+
+
+            await cargarProductos();
+
+        }
+
+
+        iniciarAdmin();
+
+    </script>
+
+</body>
+</html>

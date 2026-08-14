@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>KYRO | Tienda</title>
+
+    <link
+        rel="stylesheet"
+        href="pagina.css"
+    >
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+             NAVBAR
+    ========================== -->
+
+    <header class="navbar">
+
+
+        <!-- BOTÓN MENÚ MÓVIL -->
+
+        <button
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            aria-label="Abrir menú"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+
+        <!-- IZQUIERDA -->
+
+        <div class="nav-left">
+
+            <a
+                href="catalogo.html"
+                class="nav-link"
+            >
+                SHOP
+            </a>
+
+
+            <a
+                href="catalogo.html?filtro=nuevos"
+                class="nav-link"
+            >
+                NEW DROP
+            </a>
+
+        </div>
+
+
+
+        <!-- LOGO -->
+
+        <a
+            href="index.html"
+            class="logo"
+        >
+            KYRO
+        </a>
+
+
+
+        <!-- DERECHA -->
+
+        <div class="nav-right">
+
+
+            <a
+                href="catalogo.html"
+                class="nav-link"
+            >
+                VER TODO
+            </a>
+
+
+            <a
+                href="catalogo.html?filtro=stock"
+                class="nav-link"
+            >
+                EN STOCK
+            </a>
+
+
+            <a
+                href="registro.html"
+                class="nav-link"
+            >
+                REGISTRARSE
+            </a>
+
+
+            <a
+                href="login.html"
+                class="nav-link"
+            >
+                INICIAR SESIÓN
+            </a>
+
+
+
+            <!-- BUSCADOR -->
+
+            <button
+                class="icon-button"
+                id="searchButton"
+                aria-label="Buscar"
+            >
+
+                <svg viewBox="0 0 24 24">
+
+                    <circle
+                        cx="11"
+                        cy="11"
+                        r="7"
+                    ></circle>
+
+                    <line
+                        x1="16.5"
+                        y1="16.5"
+                        x2="21"
+                        y2="21"
+                    ></line>
+
+                </svg>
+
+            </button>
+
+
+
+            <!-- FAVORITOS -->
+
+            <a
+                href="favoritos.html"
+                class="icon-button"
+                aria-label="Favoritos"
+            >
+
+                <svg viewBox="0 0 24 24">
+
+                    <path
+                        d="
+                        M20.8 4.6
+                        c-2.1-2.1-5.5-2.1-7.6 0
+                        L12 5.8
+                        l-1.2-1.2
+                        c-2.1-2.1-5.5-2.1-7.6 0
+                        s-2.1 5.5 0 7.6
+                        L12 21
+                        l8.8-8.8
+                        c2.1-2.1 2.1-5.5 0-7.6z
+                        "
+                    ></path>
+
+                </svg>
+
+            </a>
+
+
+
+            <!-- CARRITO -->
+
+            <a
+                href="carrito.html"
+                class="icon-button cart-button"
+                aria-label="Carrito"
+            >
+
+                <svg viewBox="0 0 24 24">
+
+                    <path
+                        d="M3 4h2l2.4 10.2h9.8L20 7H7"
+                    ></path>
+
+
+                    <circle
+                        cx="9"
+                        cy="19"
+                        r="1"
+                    ></circle>
+
+
+                    <circle
+                        cx="18"
+                        cy="19"
+                        r="1"
+                    ></circle>
+
+                </svg>
+
+
+                <span
+                    class="cart-count"
+                    id="cartCount"
+                >
+                    0
+                </span>
+
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+           MENÚ MÓVIL
+    ========================== -->
+
+    <div
+        class="mobile-menu"
+        id="mobileMenu"
+    >
+
+
+        <div class="mobile-menu-top">
+
+
+            <a
+                href="index.html"
+                class="mobile-logo"
+            >
+                KYRO
+            </a>
+
+
+            <button
+                class="mobile-menu-close"
+                id="mobileMenuClose"
+                aria-label="Cerrar menú"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+
+
+        <nav class="mobile-menu-links">
+
+
+            <a href="catalogo.html">
+                SHOP
+            </a>
+
+
+            <a href="catalogo.html?filtro=nuevos">
+                NEW DROP
+            </a>
+
+
+            <a href="catalogo.html">
+                VER TODO
+            </a>
+
+
+            <a href="catalogo.html?filtro=stock">
+                EN STOCK
+            </a>
+
+
+            <a href="favoritos.html">
+                FAVORITOS
+            </a>
+
+
+            <a href="carrito.html">
+                CARRITO
+            </a>
+
+
+
+            <div class="mobile-menu-divider"></div>
+
+
+
+            <a
+                href="login.html"
+                class="mobile-account"
+            >
+                INICIAR SESIÓN
+            </a>
+
+
+            <a
+                href="registro.html"
+                class="mobile-account"
+            >
+                REGISTRARSE
+            </a>
+
+
+        </nav>
+
+    </div>
+
+
+
+    <!-- =========================
+             BUSCADOR
+    ========================== -->
+
+    <div
+        class="search-panel"
+        id="searchPanel"
+    >
+
+        <div class="search-box">
+
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="BUSCAR PRODUCTOS..."
+            >
+
+
+            <button
+                class="search-close"
+                id="searchClose"
+                aria-label="Cerrar"
+            >
+                ×
+            </button>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+               HERO
+    ========================== -->
+
+    <main class="hero">
+
+
+        <!-- IZQUIERDA -->
+
+        <section class="hero-panel hero-left">
+
+
+            <div class="overlay"></div>
+
+
+            <div class="hero-content">
+
+
+                <p class="hero-small">
+                    KYRO COLLECTION
+                </p>
+
+
+                <h1>
+                    KYRO
+                </h1>
+
+
+                <a
+                    href="catalogo.html"
+                    class="hero-button"
+                >
+                    DESCUBRIR
+                </a>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- DERECHA -->
+
+        <section class="hero-panel hero-right">
+
+
+            <div class="overlay"></div>
+
+
+            <div class="hero-content">
+
+
+                <p class="hero-small">
+                    NEW DROP
+                </p>
+
+
+                <h1>
+                    DROP 001
+                </h1>
+
+
+                <div class="hero-buttons">
+
+
+                    <a
+                        href="catalogo.html?filtro=nuevos"
+                        class="hero-button"
+                    >
+                        EXPLORAR
+                    </a>
+
+
+                    <a
+                        href="catalogo.html"
+                        class="hero-button"
+                    >
+                        COMPRAR
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================
+             FINAL
+    ========================== -->
+
+    <footer class="footer">
+
+        <h2>
+            KYRO
+        </h2>
+
+    </footer>
+
+
+
+    <!-- TU JAVASCRIPT ACTUAL -->
+
+    <script src="pagina.js"></script>
+
+
+
+    <!-- =========================
+          MENÚ MÓVIL JS
+    ========================== -->
+
+    <script>
+
+        const mobileMenuButton =
+            document.getElementById(
+                "mobileMenuButton"
+            );
+
+
+        const mobileMenu =
+            document.getElementById(
+                "mobileMenu"
+            );
+
+
+        const mobileMenuClose =
+            document.getElementById(
+                "mobileMenuClose"
+            );
+
+
+
+        if (
+            mobileMenuButton &&
+            mobileMenu &&
+            mobileMenuClose
+        ) {
+
+
+            // ABRIR
+
+            mobileMenuButton.addEventListener(
+                "click",
+                function () {
+
+                    mobileMenu.classList.add(
+                        "active"
+                    );
+
+
+                    document.body.style.overflow =
+                        "hidden";
+
+                }
+            );
+
+
+
+            // CERRAR
+
+            mobileMenuClose.addEventListener(
+                "click",
+                function () {
+
+                    mobileMenu.classList.remove(
+                        "active"
+                    );
+
+
+                    document.body.style.overflow =
+                        "";
+
+                }
+            );
+
+
+
+            // CERRAR AL TOCAR UN LINK
+
+            mobileMenu
+                .querySelectorAll("a")
+                .forEach(
+                    function (link) {
+
+                        link.addEventListener(
+                            "click",
+                            function () {
+
+                                mobileMenu.classList.remove(
+                                    "active"
+                                );
+
+
+                                document.body.style.overflow =
+                                    "";
+
+                            }
+                        );
+
+                    }
+                );
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Carrito | KYRO</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f7f7f5;
+            color: #111;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        .topbar {
+            height: 78px;
+            background: #050505;
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+            padding: 0 30px;
+        }
+
+        .back {
+            position: absolute;
+            left: 30px;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1400px;
+
+            margin: auto;
+
+            padding: 65px 30px 100px;
+        }
+
+        .page-header {
+            margin-bottom: 45px;
+        }
+
+        .page-header p {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: #777;
+            margin-bottom: 12px;
+        }
+
+        .page-header h1 {
+            font-size: 38px;
+            font-weight: 500;
+            letter-spacing: -1.5px;
+        }
+
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+
+            gap: 55px;
+        }
+
+        .cart-items {
+            border-top: 1px solid #ddd;
+        }
+
+        .cart-item {
+            position: relative;
+
+            display: grid;
+
+            grid-template-columns:
+                150px
+                1fr
+                120px
+                40px;
+
+            gap: 20px;
+
+            align-items: center;
+
+            padding: 25px 0;
+
+            border-bottom: 1px solid #ddd;
+        }
+
+        .item-image {
+            width: 150px;
+            height: 170px;
+
+            background: #e9e9e7;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            overflow: hidden;
+        }
+
+        .item-image img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .no-image {
+            color: #999;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .item-info .category {
+            font-size: 9px;
+            color: #888;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 7px;
+        }
+
+        .item-info h2 {
+            font-size: 16px;
+            font-weight: 600;
+
+            margin-bottom: 8px;
+        }
+
+        .item-info .unit-price {
+            font-size: 12px;
+            color: #555;
+        }
+
+        .quantity {
+            display: flex;
+            align-items: center;
+
+            border: 1px solid #bbb;
+
+            width: 110px;
+            height: 42px;
+
+            margin-top: 15px;
+        }
+
+        .quantity button {
+            width: 34px;
+            height: 100%;
+
+            border: 0;
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 18px;
+        }
+
+        .quantity span {
+            flex: 1;
+
+            text-align: center;
+
+            font-size: 12px;
+        }
+
+        .subtotal {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .remove {
+            width: 34px;
+            height: 34px;
+
+            border: 0;
+            background: transparent;
+
+            cursor: pointer;
+
+            color: #888;
+
+            font-size: 22px;
+        }
+
+        .remove:hover {
+            color: #111;
+        }
+
+        .summary {
+            background: white;
+
+            padding: 30px;
+
+            height: fit-content;
+
+            position: sticky;
+            top: 30px;
+        }
+
+        .summary h2 {
+            font-size: 18px;
+            font-weight: 600;
+
+            margin-bottom: 30px;
+        }
+
+        .summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 15px;
+
+            font-size: 12px;
+        }
+
+        .summary-total {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding-top: 20px;
+
+            margin-top: 20px;
+
+            border-top: 1px solid #ddd;
+
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .whatsapp-button {
+            width: 100%;
+            height: 54px;
+
+            margin-top: 30px;
+
+            border: 1px solid #111;
+
+            background: #111;
+            color: white;
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .whatsapp-button:hover {
+            background: #333;
+        }
+
+        .clear-button {
+            width: 100%;
+            height: 46px;
+
+            margin-top: 10px;
+
+            border: 1px solid #111;
+
+            background: transparent;
+            color: #111;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+        .clear-button:hover {
+            background: #111;
+            color: white;
+        }
+
+        .empty {
+            padding: 90px 20px;
+
+            text-align: center;
+        }
+
+        .empty h2 {
+            font-size: 25px;
+            font-weight: 500;
+
+            margin-bottom: 15px;
+        }
+
+        .empty p {
+            color: #777;
+
+            font-size: 13px;
+
+            margin-bottom: 25px;
+        }
+
+        .empty a {
+            display: inline-flex;
+
+            height: 46px;
+
+            padding: 0 25px;
+
+            border: 1px solid #111;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .empty a:hover {
+            background: #111;
+            color: white;
+        }
+
+        @media (max-width: 1000px) {
+
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .summary {
+                position: static;
+            }
+
+            .cart-item {
+                grid-template-columns:
+                    120px
+                    1fr
+                    100px;
+            }
+
+            .subtotal {
+                display: none;
+            }
+
+            .remove {
+                position: absolute;
+                right: 0;
+                top: 20px;
+            }
+
+        }
+
+        @media (max-width: 650px) {
+
+            .topbar {
+                height: 65px;
+            }
+
+            .back {
+                left: 18px;
+            }
+
+            .logo {
+                font-size: 25px;
+            }
+
+            .page {
+                padding: 45px 14px 70px;
+            }
+
+            .page-header h1 {
+                font-size: 31px;
+            }
+
+            .cart-item {
+                grid-template-columns: 100px 1fr;
+
+                align-items: start;
+            }
+
+            .item-image {
+                width: 100px;
+                height: 120px;
+            }
+
+            .subtotal {
+                display: block;
+
+                grid-column: 2;
+
+                margin-top: 10px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+
+        <a href="catalogo.html" class="back">
+            ← SEGUIR COMPRANDO
+        </a>
+
+        <a href="index.html" class="logo">
+            KYRO
+        </a>
+
+    </header>
+
+
+    <main class="page">
+
+        <div class="page-header">
+
+            <p>KYRO STORE</p>
+
+            <h1>
+                TU CARRITO
+            </h1>
+
+        </div>
+
+
+        <div id="cartContainer"></div>
+
+    </main>
+
+
+    <script>
+
+        const cartContainer =
+            document.getElementById(
+                "cartContainer"
+            );
+
+
+        // ==============================
+        // OBTENER CARRITO
+        // ==============================
+
+        function obtenerCarrito() {
+
+            return (
+                JSON.parse(
+                    localStorage.getItem(
+                        "carritoKYRO"
+                    )
+                ) || []
+            );
+
+        }
+
+
+        // ==============================
+        // GUARDAR CARRITO
+        // ==============================
+
+        function guardarCarrito(
+            carrito
+        ) {
+
+            localStorage.setItem(
+                "carritoKYRO",
+                JSON.stringify(
+                    carrito
+                )
+            );
+
+        }
+
+
+        // ==============================
+        // CALCULAR TOTAL
+        // ==============================
+
+        function calcularTotal(
+            carrito
+        ) {
+
+            return carrito.reduce(
+                function (
+                    total,
+                    producto
+                ) {
+
+                    return (
+                        total +
+                        (
+                            Number(
+                                producto.precio
+                            ) *
+                            Number(
+                                producto.cantidad
+                            )
+                        )
+                    );
+
+                },
+                0
+            );
+
+        }
+
+
+        // ==============================
+        // MOSTRAR CARRITO
+        // ==============================
+
+        function renderizarCarrito() {
+
+            const carrito =
+                obtenerCarrito();
+
+
+            if (
+                carrito.length === 0
+            ) {
+
+                cartContainer.innerHTML = `
+
+                    <div class="empty">
+
+                        <h2>
+                            TU CARRITO ESTÁ VACÍO
+                        </h2>
+
+                        <p>
+                            Agrega productos para comenzar tu pedido.
+                        </p>
+
+                        <a href="catalogo.html">
+                            VER PRODUCTOS
+                        </a>
+
+                    </div>
+
+                `;
+
+                return;
+            }
+
+
+            let productosHTML = "";
+
+
+            carrito.forEach(
+                function (
+                    producto,
+                    index
+                ) {
+
+                    const subtotal =
+                        Number(
+                            producto.precio
+                        ) *
+                        Number(
+                            producto.cantidad
+                        );
+
+
+                    let imagenHTML = `
+
+                        <span class="no-image">
+                            SIN IMAGEN
+                        </span>
+
+                    `;
+
+
+                    if (producto.imagen) {
+
+                        imagenHTML = `
+
+                            <img
+                                src="${producto.imagen}"
+                                alt="${producto.nombre}"
+                            >
+
+                        `;
+
+                    }
+
+
+                    productosHTML += `
+
+                        <article class="cart-item">
+
+                            <div class="item-image">
+                                ${imagenHTML}
+                            </div>
+
+
+                            <div class="item-info">
+
+                                <p class="category">
+                                    ${
+                                        producto.categoria ||
+                                        "Producto"
+                                    }
+                                </p>
+
+                                <h2>
+                                    ${producto.nombre}
+                                </h2>
+
+                                <p class="unit-price">
+
+                                    $${Number(
+                                        producto.precio
+                                    ).toFixed(2)}
+                                    c/u
+
+                                </p>
+
+
+                                <div class="quantity">
+
+                                    <button
+                                        onclick="cambiarCantidad(
+                                            ${index},
+                                            -1
+                                        )"
+                                    >
+                                        −
+                                    </button>
+
+                                    <span>
+                                        ${producto.cantidad}
+                                    </span>
+
+                                    <button
+                                        onclick="cambiarCantidad(
+                                            ${index},
+                                            1
+                                        )"
+                                    >
+                                        +
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="subtotal">
+
+                                $${subtotal.toFixed(2)}
+
+                            </div>
+
+
+                            <button
+                                class="remove"
+                                onclick="eliminarProducto(
+                                    ${index}
+                                )"
+                                aria-label="Eliminar producto"
+                            >
+                                ×
+                            </button>
+
+                        </article>
+
+                    `;
+
+                }
+            );
+
+
+            const total =
+                calcularTotal(
+                    carrito
+                );
+
+
+            const cantidadTotal =
+                carrito.reduce(
+                    function (
+                        total,
+                        producto
+                    ) {
+
+                        return (
+                            total +
+                            Number(
+                                producto.cantidad
+                            )
+                        );
+
+                    },
+                    0
+                );
+
+
+            cartContainer.innerHTML = `
+
+                <div class="cart-layout">
+
+
+                    <section class="cart-items">
+
+                        ${productosHTML}
+
+                    </section>
+
+
+                    <aside class="summary">
+
+                        <h2>
+                            RESUMEN
+                        </h2>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Productos
+                            </span>
+
+                            <span>
+                                ${cantidadTotal}
+                            </span>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Envío
+                            </span>
+
+                            <span>
+                                A coordinar
+                            </span>
+
+                        </div>
+
+
+                        <div class="summary-total">
+
+                            <span>
+                                TOTAL
+                            </span>
+
+                            <span>
+                                $${total.toFixed(2)}
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            class="whatsapp-button"
+                            onclick="finalizarWhatsApp()"
+                        >
+                            FINALIZAR PEDIDO POR WHATSAPP
+                        </button>
+
+
+                        <button
+                            class="clear-button"
+                            onclick="vaciarCarrito()"
+                        >
+                            VACIAR CARRITO
+                        </button>
+
+                    </aside>
+
+
+                </div>
+
+            `;
+
+        }
+
+
+        // ==============================
+        // CAMBIAR CANTIDAD
+        // ==============================
+
+        function cambiarCantidad(
+            index,
+            cambio
+        ) {
+
+            const carrito =
+                obtenerCarrito();
+
+
+            const producto =
+                carrito[index];
+
+
+            if (!producto) {
+                return;
+            }
+
+
+            const nuevaCantidad =
+                Number(
+                    producto.cantidad
+                ) +
+                cambio;
+
+
+            if (
+                nuevaCantidad < 1
+            ) {
+
+                eliminarProducto(
+                    index
+                );
+
+                return;
+            }
+
+
+            if (
+                nuevaCantidad >
+                Number(
+                    producto.stock
+                )
+            ) {
+
+                alert(
+                    "No hay suficiente stock disponible."
+                );
+
+                return;
+            }
+
+
+            producto.cantidad =
+                nuevaCantidad;
+
+
+            guardarCarrito(
+                carrito
+            );
+
+
+            renderizarCarrito();
+
+        }
+
+
+        // ==============================
+        // ELIMINAR PRODUCTO
+        // ==============================
+
+        function eliminarProducto(
+            index
+        ) {
+
+            const carrito =
+                obtenerCarrito();
+
+
+            carrito.splice(
+                index,
+                1
+            );
+
+
+            guardarCarrito(
+                carrito
+            );
+
+
+            renderizarCarrito();
+
+        }
+
+
+        // ==============================
+        // VACIAR CARRITO
+        // ==============================
+
+        function vaciarCarrito() {
+
+            const confirmar =
+                confirm(
+                    "¿Quieres vaciar todo el carrito?"
+                );
+
+
+            if (!confirmar) {
+                return;
+            }
+
+
+            localStorage.removeItem(
+                "carritoKYRO"
+            );
+
+
+            renderizarCarrito();
+
+        }
+
+
+        // ==============================
+        // FINALIZAR POR WHATSAPP
+        // ==============================
+
+        function finalizarWhatsApp() {
+
+            const carrito =
+                obtenerCarrito();
+
+
+            if (
+                carrito.length === 0
+            ) {
+
+                alert(
+                    "El carrito está vacío."
+                );
+
+                return;
+            }
+
+
+            const total =
+                calcularTotal(
+                    carrito
+                );
+
+
+            let mensaje =
+                "Hola, quiero realizar este pedido en KYRO:\n\n";
+
+
+            carrito.forEach(
+                function (
+                    producto
+                ) {
+
+                    const subtotal =
+                        Number(
+                            producto.precio
+                        ) *
+                        Number(
+                            producto.cantidad
+                        );
+
+
+                    mensaje +=
+                        "• " +
+                        producto.nombre +
+                        "\n";
+
+
+                    mensaje +=
+                        "Cantidad: " +
+                        producto.cantidad +
+                        "\n";
+
+
+                    mensaje +=
+                        "Precio: $" +
+                        Number(
+                            producto.precio
+                        ).toFixed(2) +
+                        "\n";
+
+
+                    mensaje +=
+                        "Subtotal: $" +
+                        subtotal.toFixed(2) +
+                        "\n\n";
+
+                }
+            );
+
+
+            mensaje +=
+                "TOTAL: $" +
+                total.toFixed(2) +
+                "\n\n";
+
+
+            mensaje +=
+                "Quisiera coordinar el pago y la entrega.";
+
+
+            // TU NÚMERO DE WHATSAPP
+            // 0995248198
+            // Ecuador +593 sin el 0 inicial
+
+            const numeroWhatsApp =
+                "593995248198";
+
+
+            const url =
+                "https://wa.me/" +
+                numeroWhatsApp +
+                "?text=" +
+                encodeURIComponent(
+                    mensaje
+                );
+
+
+            window.open(
+                url,
+                "_blank"
+            );
+
+        }
+
+
+        // ==============================
+        // CARGAR AL ABRIR
+        // ==============================
+
+        renderizarCarrito();
+
+    </script>
+
+</body>
+</html>
